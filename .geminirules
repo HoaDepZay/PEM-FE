@@ -1,0 +1,22 @@
+# Frontend Rules & Conventions (React + Vite)
+
+## 1. Naming Conventions
+- **Components**: Bắt buộc sử dụng `PascalCase` cho tên file và tên hàm Component (vd: `CameraSnap.tsx`, `Dashboard.tsx`).
+- **Hooks & Utils**: Sử dụng `camelCase` (vd: `useExpenses.ts`, `formatCurrency.ts`).
+- **Biến và Hàm nội bộ**: Sử dụng `camelCase` (vd: `handleUpload`, `isLoading`).
+- **Interfaces/Types**: Bắt buộc sử dụng `PascalCase` (vd: `ExpenseData`).
+
+## 2. Component Architecture (Tính Tái sử dụng)
+- **DRY (Don't Repeat Yourself)**: Không được phép tạo nhiều Component có chức năng tương tự nhau.
+- **Thành phần chung (UI Components)**: Các nút bấm (Button), ô nhập liệu (Input), Modal, Card... phải được tạo trong `src/components/ui/` và nhận `props` để tái sử dụng.
+- **Thành phần tính năng (Feature Components)**: Các block lớn như Form, Danh sách, được đặt ở `src/components/` hoặc `src/components/features/`.
+- **Pages**: Các màn hình chính đặt tại `src/pages/`.
+
+## 3. Styling & Tailwind CSS
+- Ưu tiên 100% sử dụng **Tailwind CSS** class trực tiếp trên thẻ JSX.
+- Không viết thêm file `.css` bên ngoài trừ khi thực sự cần thiết (như custom animation phức tạp).
+- Thống nhất phong cách UI: Nền Dark mode (bg-black), chữ trắng/xám, bo góc mượt (rounded-xl, rounded-2xl), hiệu ứng kính mờ (backdrop-blur).
+
+## 4. State Management & API
+- API call phải được gom nhóm hoặc đẩy ra file dịch vụ riêng (vd: `src/api/`) nếu dự án phình to.
+- Quản lý trạng thái gọn gàng, tránh truyền `props` quá 3 tầng (Prop drilling). Mặc định sử dụng React Context hoặc Zustand nếu cần chia sẻ state toàn cục.
