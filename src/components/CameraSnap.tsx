@@ -54,7 +54,7 @@ export default function CameraSnap() {
       formData.append('image', compressedFile);
       formData.append('note', note);
       
-      const apiUrl = import.meta.env.VITE_API_URL || 'https://pem.danghoa-erp.site/api/v1';
+      const apiUrl = import.meta.env.VITE_API_URL;
       const response = await fetch(`${apiUrl}/expenses/`, {
         method: 'POST',
         body: formData,
