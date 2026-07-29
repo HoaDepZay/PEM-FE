@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus, Edit2, Trash2, Tag, Coffee, ShoppingBag, Car, Home as HomeIcon } from 'lucide-react';
+import { ArrowLeft, Plus, Edit2, Trash2, Tag } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 interface Category {
@@ -10,14 +10,6 @@ interface Category {
   color: string;
   user_id?: string;
 }
-
-const AVAILABLE_ICONS = [
-  { name: 'Coffee', icon: Coffee },
-  { name: 'ShoppingBag', icon: ShoppingBag },
-  { name: 'Car', icon: Car },
-  { name: 'Home', icon: HomeIcon },
-  { name: 'Tag', icon: Tag },
-];
 
 const AVAILABLE_COLORS = ['#EF4444', '#F97316', '#F59E0B', '#10B981', '#3B82F6', '#6366F1', '#8B5CF6', '#EC4899'];
 

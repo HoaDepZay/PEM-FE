@@ -1,6 +1,6 @@
 import React, { useRef, useState, useCallback, useEffect, type FormEvent } from 'react';
 import Webcam from 'react-webcam';
-import { Camera, Send, X, Tag } from 'lucide-react';
+import { Camera, Send, X } from 'lucide-react';
 import imageCompression from 'browser-image-compression';
 import { useAuth } from '../../context/AuthContext';
 

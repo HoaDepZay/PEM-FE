@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Mail, Lock, User, ArrowRight, Loader2, CheckCircle } from 'lucide-react';
 
 export const Register: React.FC = () => {
