@@ -49,8 +49,24 @@ export default function CameraSnap() {
       console.log('Original size:', file.size / 1024 / 1024, 'MB');
       console.log('Compressed size:', compressedFile.size / 1024 / 1024, 'MB');
       
-      // TODO: Gửi API lên Backend (compressedFile + note)
-      console.log("Submit:", note);
+      // 3. Gửi API lên Backend (compressedFile + note)
+      const formData = new FormData();
+      formData.append('image', compressedFile);
+      formData.append('note', note);
+      
+      const apiUrl = import.meta.env.VITE_API_URL || 'https://pem.danghoa-erp.site/api/v1';
+      const response = await fetch(`${apiUrl}/expenses/`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      console.log("Submit success:", result);
+      alert('Đã lưu chi tiêu thành công!');
       
       // Reset after success
       retake();
