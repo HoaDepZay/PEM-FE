@@ -1,4 +1,3 @@
-import React from 'react'
 import CameraSnap from './components/CameraSnap'
 
 function App() {

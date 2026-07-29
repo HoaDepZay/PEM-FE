@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback, type FormEvent } from 'react';
 import Webcam from 'react-webcam';
 import { Camera, Send, X } from 'lucide-react';
 import imageCompression from 'browser-image-compression';
@@ -27,7 +27,7 @@ export default function CameraSnap() {
     setNote('');
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!imageSrc) return;
     
