@@ -28,7 +28,6 @@ export const Locker: React.FC = () => {
   const [categories, setCategories] = useState<Record<string, Category>>({});
   const [isLoading, setIsLoading] = useState(true);
 
-  const MINIO_URL = import.meta.env.VITE_MINIO_URL || 'http://100.109.65.2:9000';
 
   useEffect(() => {
     const fetchData = async () => {
