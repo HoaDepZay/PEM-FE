@@ -12,10 +12,16 @@
 - **Thành phần tính năng (Feature Components)**: Các block lớn như Form, Danh sách, được đặt ở `src/components/` hoặc `src/components/features/`.
 - **Pages**: Các màn hình chính đặt tại `src/pages/`.
 
-## 3. Styling & Tailwind CSS
-- Ưu tiên 100% sử dụng **Tailwind CSS** class trực tiếp trên thẻ JSX.
-- Không viết thêm file `.css` bên ngoài trừ khi thực sự cần thiết (như custom animation phức tạp).
-- Thống nhất phong cách UI: Nền Dark mode (bg-black), chữ trắng/xám, bo góc mượt (rounded-xl, rounded-2xl), hiệu ứng kính mờ (backdrop-blur).
+## 3. Design System & Styling (Tailwind CSS)
+- **Cấm sử dụng CSS thuần**: Ưu tiên 100% sử dụng Tailwind CSS class trực tiếp trên thẻ JSX.
+- **Bảng màu chuẩn (Color Palette - Light Mode Fintech)**:
+  - **Background (Nền chính)**: `bg-slate-50` (sáng sủa, dịu mắt).
+  - **Bề mặt nổi (Surfaces/Cards)**: `bg-white` kết hợp đổ bóng nhẹ `shadow-sm` hoặc `shadow-md`, viền rất nhạt `border border-slate-100`.
+  - **Màu chủ đạo (Primary Action)**: `bg-blue-600` (hiện đại, tin cậy), chữ trắng `text-white`. Hover: `hover:bg-blue-700`. Tránh dùng gradient lóa mắt.
+  - **Trạng thái (Accents)**: Thành công/Tiền vào: `emerald-600`. Lỗi/Tiền ra: `rose-600`.
+  - **Text**: Tiêu đề dùng `text-slate-900`, text phụ dùng `text-slate-500`.
+- **Bo góc (Border Radius)**: Mềm mại, bo góc lớn `rounded-xl`, `rounded-2xl` hoặc `rounded-3xl` cho thẻ lớn.
+- **Hiệu ứng (Animations/Transitions)**: Thêm `transition-all duration-300` cho các nút bấm, hiệu ứng khi nhấn (active) là `active:scale-95`. Tránh dùng các hiệu ứng neon glow hay backdrop-blur quá đà.
 
 ## 4. State Management & API
 - API call phải được gom nhóm hoặc đẩy ra file dịch vụ riêng (vd: `src/api/`) nếu dự án phình to.

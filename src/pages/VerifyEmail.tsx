@@ -43,27 +43,27 @@ export const VerifyEmail: React.FC = () => {
   }, [token, apiUrl]);
 
   return (
-    <div className="min-h-screen bg-black flex flex-col justify-center items-center px-4">
-      <div className="max-w-md w-full glassmorphism rounded-2xl p-8 text-center space-y-6">
+    <div className="min-h-screen bg-transparent flex flex-col justify-center items-center px-4">
+      <div className="max-w-md w-full bg-brand-50 shadow-xl border border-brand-400/30 rounded-2xl p-8 text-center space-y-6">
         
         {status === 'loading' && (
           <div className="flex flex-col items-center space-y-4">
-            <Loader2 className="w-12 h-12 text-blue-500 animate-spin" />
-            <h2 className="text-xl font-semibold text-white">Đang xác thực...</h2>
-            <p className="text-gray-400">Vui lòng đợi trong giây lát</p>
+            <Loader2 className="w-12 h-12 text-brand-500 animate-spin" />
+            <h2 className="text-xl font-semibold text-brand-700">Đang xác thực...</h2>
+            <p className="text-brand-700/70">Vui lòng đợi trong giây lát</p>
           </div>
         )}
 
         {status === 'success' && (
           <div className="flex flex-col items-center space-y-4">
-            <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center">
+            <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center">
               <CheckCircle className="w-8 h-8 text-green-500" />
             </div>
-            <h2 className="text-2xl font-bold text-white">Thành công!</h2>
-            <p className="text-gray-400">{message}</p>
+            <h2 className="text-2xl font-bold text-brand-700">Thành công!</h2>
+            <p className="text-brand-700/70">{message}</p>
             <Link
               to="/login"
-              className="mt-4 inline-block w-full py-3 px-4 rounded-xl text-white bg-blue-600 hover:bg-blue-700 transition-all font-medium"
+              className="mt-4 inline-block w-full py-3 px-4 rounded-xl text-white bg-brand-700 hover:bg-blue-700 transition-all font-medium"
             >
               Đăng nhập ngay
             </Link>
@@ -72,14 +72,14 @@ export const VerifyEmail: React.FC = () => {
 
         {status === 'error' && (
           <div className="flex flex-col items-center space-y-4">
-            <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center">
+            <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center">
               <XCircle className="w-8 h-8 text-red-500" />
             </div>
-            <h2 className="text-2xl font-bold text-white">Xác thực thất bại</h2>
-            <p className="text-gray-400">{message}</p>
+            <h2 className="text-2xl font-bold text-brand-700">Xác thực thất bại</h2>
+            <p className="text-brand-700/70">{message}</p>
             <Link
               to="/register"
-              className="mt-4 inline-block w-full py-3 px-4 rounded-xl text-white bg-gray-800 hover:bg-gray-700 border border-gray-700 transition-all font-medium"
+              className="mt-4 inline-block w-full py-3 px-4 rounded-xl text-slate-700 bg-brand-100 hover:bg-slate-200 border border-brand-400/30 transition-all font-medium"
             >
               Quay lại trang Đăng ký
             </Link>

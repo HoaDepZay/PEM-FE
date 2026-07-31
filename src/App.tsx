@@ -13,6 +13,8 @@ import { Analytics } from './pages/Analytics'
 import { Budget } from './pages/Budget'
 import { Profile } from './pages/Profile'
 import { Categories } from './pages/Categories'
+import { ForgotPassword } from './pages/ForgotPassword'
+import { ResetPassword } from './pages/ResetPassword'
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/verify" element={<VerifyEmail />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           
           {/* Protected Routes inside MainLayout */}
           <Route element={<ProtectedRoute />}>

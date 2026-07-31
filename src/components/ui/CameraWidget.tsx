@@ -1,6 +1,6 @@
 import React, { useRef, useState, useCallback, useEffect, type FormEvent } from 'react';
 import Webcam from 'react-webcam';
-import { Camera, Send, X } from 'lucide-react';
+import { Camera, Send, X, ChevronDown, Check } from 'lucide-react';
 import imageCompression from 'browser-image-compression';
 import { useAuth } from '../../context/AuthContext';
 
@@ -20,6 +20,7 @@ export const CameraWidget: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const { token } = useAuth();
 
@@ -119,7 +120,7 @@ export const CameraWidget: React.FC = () => {
   };
 
   return (
-    <div className="w-full rounded-3xl overflow-hidden bg-black border border-white/20 relative shadow-2xl aspect-[3/4]">
+    <div className={`w-full rounded-3xl overflow-hidden border border-brand-400/30 relative shadow-xl transition-all ${!imageSrc ? 'bg-slate-950 aspect-[3/4]' : 'bg-brand-50 flex flex-col'}`}>
       {!imageSrc ? (
         <>
           <Webcam
@@ -133,32 +134,89 @@ export const CameraWidget: React.FC = () => {
           <div className="absolute bottom-6 w-full flex justify-center">
             <button
               onClick={capture}
-              className="w-16 h-16 bg-white/30 rounded-full flex items-center justify-center border-[3px] border-white backdrop-blur-sm active:scale-95 transition-transform shadow-[0_0_15px_rgba(255,255,255,0.3)]"
+              className="w-16 h-16 bg-brand-50/10 rounded-full flex items-center justify-center border-[3px] border-white/80 backdrop-blur-md active:scale-90 transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)]"
             >
-              <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
-                <Camera className="text-black w-6 h-6" />
+              <div className="w-12 h-12 bg-brand-50 rounded-full flex items-center justify-center shadow-inner">
+                <Camera className="text-brand-700 w-6 h-6" />
               </div>
             </button>
           </div>
         </>
       ) : (
-        <>
-          <img src={imageSrc} alt="Captured" className="w-full h-full object-cover" />
-          
-          <div className="absolute bottom-0 left-0 right-0 h-[80%] bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none"></div>
+        <div className="flex flex-col w-full h-full">
+          {/* Image Preview Area */}
+          <div className="relative w-full aspect-[4/3] bg-brand-100/50 border-b border-brand-400/30">
+            <img src={imageSrc} alt="Captured" className="w-full h-full object-contain" />
+            <button 
+              onClick={retake}
+              className="absolute top-4 left-4 p-2.5 bg-brand-50/80 rounded-full text-brand-700 backdrop-blur-xl border border-brand-400/30 z-10 active:scale-90 transition-all shadow-sm"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
 
-          <button 
-            onClick={retake}
-            className="absolute top-4 left-4 p-2 bg-black/50 rounded-full text-white backdrop-blur-md z-10"
-          >
-            <X className="w-5 h-5" />
-          </button>
-
+          {/* Form Area */}
           <form 
             onSubmit={handleSubmit} 
-            className="absolute bottom-0 left-0 right-0 p-4 flex flex-col gap-3"
+            className="p-5 flex flex-col gap-4 bg-brand-50"
           >
-            <div className="flex gap-2">
+            {/* Category Custom Dropdown */}
+            <div className="relative w-full z-20">
+              <button
+                type="button"
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className={`w-full flex items-center justify-between px-6 py-4 rounded-xl border transition-all ${
+                  isDropdownOpen 
+                    ? 'bg-brand-50 border-brand-400 ring-4 ring-brand-100 shadow-sm' 
+                    : 'bg-brand-100/50 border-transparent shadow-inner hover:bg-brand-100'
+                }`}
+              >
+                <span className={`font-semibold ${!categoryId ? 'text-brand-700/50' : 'text-brand-700'}`}>
+                  {categories.find(c => c.category_id === categoryId)?.name || 'Chọn danh mục'}
+                </span>
+                <ChevronDown className={`w-5 h-5 text-brand-400 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180 text-brand-700' : ''}`} />
+              </button>
+
+              {isDropdownOpen && (
+                <>
+                  {/* Invisible backdrop to close dropdown */}
+                  <div 
+                    className="fixed inset-0 z-10" 
+                    onClick={() => setIsDropdownOpen(false)}
+                  ></div>
+                  
+                  {/* Dropdown Menu */}
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-brand-50 border border-brand-400/30 rounded-xl shadow-xl shadow-brand-700/10 overflow-hidden z-20 animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="max-h-60 overflow-y-auto overscroll-contain">
+                      {categories.length === 0 ? (
+                        <div className="px-6 py-4 text-brand-700/60 text-sm">Chưa có danh mục</div>
+                      ) : (
+                        categories.map((cat) => (
+                          <button
+                            key={cat.category_id}
+                            type="button"
+                            onClick={() => {
+                              setCategoryId(cat.category_id);
+                              setIsDropdownOpen(false);
+                            }}
+                            className={`w-full flex items-center justify-between px-6 py-3.5 text-left transition-colors ${
+                              categoryId === cat.category_id 
+                                ? 'bg-brand-100 text-brand-700 font-bold' 
+                                : 'text-brand-700/80 hover:bg-brand-100/50 hover:text-brand-700 font-medium'
+                            }`}
+                          >
+                            <span>{cat.name}</span>
+                            {categoryId === cat.category_id && <Check className="w-5 h-5 text-brand-700" />}
+                          </button>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-3">
               <input
                 type="text"
                 inputMode="numeric"
@@ -166,46 +224,37 @@ export const CameraWidget: React.FC = () => {
                 placeholder="Số tiền..."
                 value={amount}
                 onChange={handleAmountChange}
-                className="flex-1 bg-black/60 text-white placeholder-gray-400 text-lg font-bold px-4 py-3 rounded-xl backdrop-blur-lg border border-white/20 focus:outline-none focus:border-white/50"
+                className="w-full bg-brand-100/50 text-brand-700 placeholder-brand-700/40 text-2xl font-black px-6 py-4 rounded-2xl border border-transparent focus:outline-none focus:bg-brand-50 focus:border-brand-400 focus:ring-4 focus:ring-brand-100 transition-all shadow-inner"
                 required
               />
-              <select
-                value={categoryId}
-                onChange={(e) => setCategoryId(e.target.value)}
-                className="w-1/3 bg-black/60 text-white px-3 py-3 rounded-xl backdrop-blur-lg border border-white/20 focus:outline-none focus:border-white/50 appearance-none"
-                required
-              >
-                {categories.length === 0 && <option value="">Chưa có DM</option>}
-                {categories.map(cat => (
-                  <option key={cat.category_id} value={cat.category_id}>{cat.name}</option>
-                ))}
-              </select>
+              
+              <input
+                type="text"
+                placeholder="Ghi chú (Tùy chọn)..."
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                className="w-full bg-brand-100/50 text-brand-700 placeholder-brand-700/40 text-base font-medium px-6 py-4 rounded-xl border border-transparent focus:outline-none focus:bg-brand-50 focus:border-brand-400 focus:ring-4 focus:ring-brand-100 transition-all shadow-inner"
+              />
             </div>
-
-            <input
-              type="text"
-              placeholder="Ghi chú (Tùy chọn)..."
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-              className="w-full bg-black/60 text-white placeholder-gray-400 text-base px-4 py-3 rounded-xl backdrop-blur-lg border border-white/20 focus:outline-none focus:border-white/50"
-            />
 
             <button
               type="submit"
               disabled={isSubmitting || !amount || !categoryId}
-              className="w-full bg-white hover:bg-gray-200 disabled:bg-gray-800 text-black disabled:text-gray-500 font-semibold py-3 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-lg"
+              className="w-full bg-gradient-to-r from-brand-700 to-brand-500 hover:from-brand-700/90 hover:to-brand-500/90 disabled:from-brand-100 disabled:to-brand-100 text-white disabled:text-brand-700/40 font-bold py-4 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-brand-500/30 disabled:shadow-none active:scale-95 mt-2"
             >
               {isSubmitting ? (
-                <span className="animate-pulse">Đang gửi...</span>
+                <span className="animate-pulse flex items-center gap-2">
+                  Đang lưu...
+                </span>
               ) : (
                 <>
-                  <Send className="w-4 h-4" />
+                  <Send className="w-5 h-5" />
                   Lưu giao dịch
                 </>
               )}
             </button>
           </form>
-        </>
+        </div>
       )}
     </div>
   );
