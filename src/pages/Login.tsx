@@ -101,7 +101,7 @@ export const Login: React.FC = () => {
               </button>
             </div>
             <div className="flex items-center justify-end">
-              <Link to="/forgot-password" className="text-sm font-medium text-brand-700 hover:text-brand-500">
+              <Link to="/forgot-password" className="text-sm font-medium text-brand-700 hover:text-brand-7000">
                 Quên mật khẩu?
               </Link>
             </div>
@@ -127,7 +127,7 @@ export const Login: React.FC = () => {
 
         <p className="mt-4 text-center text-sm text-brand-700/70 relative z-10">
           Chưa có tài khoản?{' '}
-          <Link to="/register" className="font-medium text-brand-700 hover:text-brand-500 transition-colors">
+          <Link to="/register" className="font-medium text-brand-700 hover:text-brand-7000 transition-colors">
             Đăng ký ngay
           </Link>
         </p>

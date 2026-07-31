@@ -173,7 +173,7 @@ export const Register: React.FC = () => {
 
         <p className="mt-4 text-center text-sm text-brand-700/70 relative z-10">
           Đã có tài khoản?{' '}
-          <Link to="/login" className="font-medium text-brand-700 hover:text-brand-500 transition-colors">
+          <Link to="/login" className="font-medium text-brand-700 hover:text-brand-7000 transition-colors">
             Đăng nhập ngay
           </Link>
         </p>

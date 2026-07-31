@@ -95,7 +95,7 @@ export const ForgotPassword = () => {
             </div>
             
             <div className="text-center mt-4">
-              <Link to="/login" className="text-sm font-medium text-brand-700 hover:text-brand-500">
+              <Link to="/login" className="text-sm font-medium text-brand-700 hover:text-brand-7000">
                 Quay lại đăng nhập
               </Link>
             </div>

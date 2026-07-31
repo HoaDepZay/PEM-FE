@@ -143,7 +143,7 @@ export const Categories: React.FC = () => {
                     </div>
                   {cat.user_id && (
                     <div className="flex gap-2">
-                      <button onClick={() => openEdit(cat)} className="p-2 text-brand-500 bg-brand-50 rounded-xl hover:bg-blue-100 transition-colors"><Edit2 className="w-5 h-5"/></button>
+                      <button onClick={() => openEdit(cat)} className="p-2 text-brand-7000 bg-brand-50 rounded-xl hover:bg-blue-100 transition-colors"><Edit2 className="w-5 h-5"/></button>
                       <button onClick={() => handleDelete(cat.category_id)} className="p-2 text-rose-500 bg-rose-50 rounded-xl hover:bg-rose-100 transition-colors"><Trash2 className="w-5 h-5"/></button>
                     </div>
                   )}

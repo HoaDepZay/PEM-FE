@@ -84,8 +84,8 @@ export const History: React.FC = () => {
   return (
     <div className="pt-8 px-4 pb-24 bg-transparent min-h-screen">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-brand-50">Lịch sử giao dịch</h1>
-        <p className="text-brand-50/70 text-sm mt-1">Xem lại các khoản chi tiêu gần đây của bạn</p>
+        <h1 className="text-2xl font-bold text-brand-700">Lịch sử giao dịch</h1>
+        <p className="text-brand-700/70 text-sm mt-1">Xem lại các khoản chi tiêu gần đây của bạn</p>
       </div>
 
       {isLoading ? (

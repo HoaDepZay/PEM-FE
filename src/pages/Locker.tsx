@@ -92,7 +92,7 @@ export const Locker: React.FC = () => {
 
       {/* Embedded Camera */}
       <div>
-        <h3 className="text-lg font-bold text-brand-50 mb-4 px-1 flex items-center gap-2">
+        <h3 className="text-lg font-bold text-brand-700 mb-4 px-1 flex items-center gap-2">
           <span className="w-2 h-6 bg-brand-400 rounded-full"></span>
           Chụp hóa đơn mới
         </h3>
@@ -102,7 +102,7 @@ export const Locker: React.FC = () => {
       {/* Recent Transactions Placeholder */}
       <div>
         <div className="flex justify-between items-center mb-4 mt-8 px-1">
-          <h3 className="text-lg font-bold text-brand-50 flex items-center gap-2">
+          <h3 className="text-lg font-bold text-brand-700 flex items-center gap-2">
             <span className="w-2 h-6 bg-brand-500 rounded-full"></span>
             Giao dịch gần đây
           </h3>

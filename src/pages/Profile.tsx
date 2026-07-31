@@ -146,7 +146,7 @@ export const Profile: React.FC = () => {
 
   return (
     <div className="pt-8 px-5 pb-24 min-h-screen bg-transparent relative">
-      <h1 className="text-3xl font-bold text-brand-50 mb-8 tracking-tight">Hồ sơ cá nhân</h1>
+      <h1 className="text-3xl font-bold text-brand-700 mb-8 tracking-tight">Hồ sơ cá nhân</h1>
       
       <div className="bg-brand-50 border border-brand-400/30 rounded-3xl p-6 mb-8 flex items-center gap-5 shadow-sm relative">
         <div 

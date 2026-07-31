@@ -48,7 +48,7 @@ export const VerifyEmail: React.FC = () => {
         
         {status === 'loading' && (
           <div className="flex flex-col items-center space-y-4">
-            <Loader2 className="w-12 h-12 text-brand-500 animate-spin" />
+            <Loader2 className="w-12 h-12 text-brand-7000 animate-spin" />
             <h2 className="text-xl font-semibold text-brand-700">Đang xác thực...</h2>
             <p className="text-brand-700/70">Vui lòng đợi trong giây lát</p>
           </div>

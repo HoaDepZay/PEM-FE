@@ -10,6 +10,6 @@
 
 @layer base {
   body {
-    @apply bg-[#5E7B6F] text-brand-50 antialiased m-0 p-0;
+    @apply bg-slate-50 text-brand-700 antialiased m-0 p-0;
   }
 }
