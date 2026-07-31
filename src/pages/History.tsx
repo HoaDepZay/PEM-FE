@@ -84,21 +84,21 @@ export const History: React.FC = () => {
   return (
     <div className="pt-8 px-4 pb-24 bg-transparent min-h-screen">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-brand-700">Lịch sử giao dịch</h1>
-        <p className="text-brand-700/70 text-sm mt-1">Xem lại các khoản chi tiêu gần đây của bạn</p>
+        <h1 className="text-2xl font-bold text-slate-900">Lịch sử giao dịch</h1>
+        <p className="text-slate-900/70 text-sm mt-1">Xem lại các khoản chi tiêu gần đây của bạn</p>
       </div>
 
       {isLoading ? (
         <div className="flex justify-center py-10">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-700"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-slate-900"></div>
         </div>
       ) : expenses.length === 0 ? (
-        <div className="bg-brand-50 rounded-2xl p-8 text-center border border-brand-400/30 shadow-sm flex flex-col items-center justify-center">
-          <div className="w-16 h-16 bg-brand-100/50 rounded-full flex items-center justify-center mb-4">
+        <div className="bg-white rounded-2xl p-8 text-center border border-slate-200 shadow-sm flex flex-col items-center justify-center">
+          <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
             <Calendar className="w-8 h-8 text-slate-300" />
           </div>
-          <p className="text-brand-700/70 font-medium">Chưa có giao dịch nào.</p>
-          <p className="text-brand-700/50 text-sm mt-1">Hãy tạo giao dịch đầu tiên của bạn!</p>
+          <p className="text-slate-900/70 font-medium">Chưa có giao dịch nào.</p>
+          <p className="text-slate-900/50 text-sm mt-1">Hãy tạo giao dịch đầu tiên của bạn!</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -108,10 +108,10 @@ export const History: React.FC = () => {
             return (
               <div 
                 key={expense.expense_id} 
-                className="bg-brand-50 rounded-2xl p-4 shadow-sm border border-brand-400/30 flex gap-4 transition-all hover:shadow-md"
+                className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 flex gap-4 transition-all hover:shadow-md"
               >
                 {/* Image Thumbnail */}
-                <div className="w-20 h-24 shrink-0 rounded-xl overflow-hidden bg-brand-100 border border-brand-400/30 relative">
+                <div className="w-20 h-24 shrink-0 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 relative">
                   {expense.image_url ? (
                     <img 
                       src={`${MINIO_URL}${expense.image_url}`} 
@@ -139,7 +139,7 @@ export const History: React.FC = () => {
                             style={{ backgroundColor: category.color || '#3b82f6' }}
                           />
                         )}
-                        <h3 className="font-semibold text-brand-700 line-clamp-1">
+                        <h3 className="font-semibold text-slate-900 line-clamp-1">
                           {category ? category.name : 'Chưa phân loại'}
                         </h3>
                       </div>
@@ -149,13 +149,13 @@ export const History: React.FC = () => {
                     </div>
                     
                     {expense.note && (
-                      <p className="text-sm text-brand-700/70 line-clamp-2 mt-1">
+                      <p className="text-sm text-slate-900/70 line-clamp-2 mt-1">
                         {expense.note}
                       </p>
                     )}
                   </div>
                   
-                  <div className="flex items-center text-xs text-brand-700/50 mt-2 font-medium">
+                  <div className="flex items-center text-xs text-slate-900/50 mt-2 font-medium">
                     <Calendar className="w-3.5 h-3.5 mr-1" />
                     {formatDate(expense.expense_date)}
                   </div>

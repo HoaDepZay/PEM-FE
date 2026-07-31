@@ -109,10 +109,10 @@ export const Categories: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-transparent text-brand-700 p-5 pb-24">
+    <div className="min-h-screen bg-transparent text-slate-900 p-5 pb-24">
       {/* Header */}
       <div className="flex items-center mb-6 gap-4">
-        <button onClick={() => navigate(-1)} className="p-2.5 bg-brand-50 border border-brand-400/30 rounded-full shadow-sm hover:bg-brand-100/50 transition-all active:scale-95">
+        <button onClick={() => navigate(-1)} className="p-2.5 bg-white border border-slate-200 rounded-full shadow-sm hover:bg-slate-50 transition-all active:scale-95">
           <ArrowLeft className="w-5 h-5 text-slate-700" />
         </button>
         <h1 className="text-2xl font-bold tracking-tight">Quản lý Danh mục</h1>
@@ -122,28 +122,28 @@ export const Categories: React.FC = () => {
         <>
           <button 
             onClick={() => { setEditingId(null); setFormData({ name: '', icon: 'Tag', color: '#3B82F6' }); setIsFormOpen(true); }}
-            className="w-full bg-brand-700 hover:bg-blue-700 text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-2 mb-6 shadow-md transition-all active:scale-95"
+            className="w-full bg-slate-900 hover:bg-blue-700 text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-2 mb-6 shadow-md transition-all active:scale-95"
           >
             <Plus className="w-5 h-5" /> Thêm danh mục mới
           </button>
 
           {loading ? (
-            <p className="text-center text-brand-700/70">Đang tải...</p>
+            <p className="text-center text-slate-900/70">Đang tải...</p>
           ) : (
             <div className="space-y-3">
               {categories.map(cat => {
                 const IconComponent = ICON_MAP[cat.icon] || Tag;
                 return (
-                  <div key={cat.category_id} className="bg-brand-50 border border-brand-400/30 shadow-sm p-4 rounded-2xl flex justify-between items-center transition-all hover:shadow-md">
+                  <div key={cat.category_id} className="bg-white border border-slate-200 shadow-sm p-4 rounded-2xl flex justify-between items-center transition-all hover:shadow-md">
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 rounded-full flex items-center justify-center shadow-inner" style={{ backgroundColor: `${cat.color}15`, color: cat.color }}>
                          <IconComponent className="w-6 h-6" />
                       </div>
-                      <span className="font-semibold text-lg text-brand-700">{cat.name}</span>
+                      <span className="font-semibold text-lg text-slate-900">{cat.name}</span>
                     </div>
                   {cat.user_id && (
                     <div className="flex gap-2">
-                      <button onClick={() => openEdit(cat)} className="p-2 text-brand-7000 bg-brand-50 rounded-xl hover:bg-blue-100 transition-colors"><Edit2 className="w-5 h-5"/></button>
+                      <button onClick={() => openEdit(cat)} className="p-2 text-slate-9000 bg-white rounded-xl hover:bg-blue-100 transition-colors"><Edit2 className="w-5 h-5"/></button>
                       <button onClick={() => handleDelete(cat.category_id)} className="p-2 text-rose-500 bg-rose-50 rounded-xl hover:bg-rose-100 transition-colors"><Trash2 className="w-5 h-5"/></button>
                     </div>
                   )}
@@ -154,8 +154,8 @@ export const Categories: React.FC = () => {
           )}
         </>
       ) : (
-        <form onSubmit={handleSubmit} className="bg-brand-50 border border-brand-400/30 shadow-md p-6 rounded-3xl space-y-6">
-          <h2 className="text-xl font-bold text-brand-700">{editingId ? 'Sửa danh mục' : 'Thêm danh mục mới'}</h2>
+        <form onSubmit={handleSubmit} className="bg-white border border-slate-200 shadow-md p-6 rounded-3xl space-y-6">
+          <h2 className="text-xl font-bold text-slate-900">{editingId ? 'Sửa danh mục' : 'Thêm danh mục mới'}</h2>
           
           <div>
             <label className="block text-slate-600 font-medium mb-2">Tên danh mục</label>
@@ -163,7 +163,7 @@ export const Categories: React.FC = () => {
               type="text" 
               value={formData.name}
               onChange={(e) => setFormData({...formData, name: e.target.value})}
-              className="w-full bg-brand-100/50 p-4 rounded-xl text-brand-700 border border-brand-400/30 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all"
+              className="w-full bg-slate-50 p-4 rounded-xl text-slate-900 border border-slate-200 focus:outline-none focus:border-slate-800 focus:ring-1 focus:ring-brand-500 transition-all"
               required
               placeholder="VD: Ăn sáng, Cà phê..."
             />
@@ -179,7 +179,7 @@ export const Categories: React.FC = () => {
                     key={iconName}
                     type="button"
                     onClick={() => setFormData({...formData, icon: iconName})}
-                    className={`p-3 rounded-xl border-2 transition-all shadow-sm flex items-center justify-center ${formData.icon === iconName ? 'border-brand-500 bg-brand-50 text-brand-700' : 'border-brand-400/30 bg-brand-50 text-brand-700/70 hover:border-slate-300'}`}
+                    className={`p-3 rounded-xl border-2 transition-all shadow-sm flex items-center justify-center ${formData.icon === iconName ? 'border-slate-800 bg-white text-slate-900' : 'border-slate-200 bg-white text-slate-900/70 hover:border-slate-300'}`}
                   >
                     <IconComp className="w-6 h-6" />
                   </button>
@@ -204,8 +204,8 @@ export const Categories: React.FC = () => {
           </div>
 
           <div className="flex gap-4 pt-4">
-            <button type="button" onClick={() => setIsFormOpen(false)} className="flex-1 py-4 rounded-xl bg-brand-100 hover:bg-slate-200 text-slate-700 font-semibold transition-all">Hủy</button>
-            <button type="submit" className="flex-1 py-4 rounded-xl bg-brand-700 hover:bg-blue-700 text-white font-semibold shadow-md transition-all">Lưu</button>
+            <button type="button" onClick={() => setIsFormOpen(false)} className="flex-1 py-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold transition-all">Hủy</button>
+            <button type="submit" className="flex-1 py-4 rounded-xl bg-slate-900 hover:bg-blue-700 text-white font-semibold shadow-md transition-all">Lưu</button>
           </div>
         </form>
       )}

@@ -14,14 +14,14 @@ export const MainLayout: React.FC = () => {
   ];
 
   return (
-    <div className="w-full h-[100dvh] overflow-hidden bg-transparent text-brand-700 relative flex flex-col">
+    <div className="w-full h-[100dvh] overflow-hidden bg-transparent text-slate-900 relative flex flex-col">
       {/* Main Content Area */}
       <main className="flex-1 overflow-y-auto pb-24 w-full">
         <Outlet />
       </main>
 
       {/* Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 w-full z-40 bg-brand-50/90 backdrop-blur-xl border-t border-brand-400/30 pb-safe">
+      <div className="fixed bottom-0 left-0 right-0 w-full z-40 bg-white/90 backdrop-blur-xl border-t border-slate-200 pb-safe">
         <div className="flex justify-around items-center h-20 px-4 max-w-md mx-auto">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;
@@ -34,7 +34,7 @@ export const MainLayout: React.FC = () => {
               >
                 {/* Dấu chấm tròn báo hiệu tab đang active */}
                 <div 
-                  className={`absolute -top-3 w-1.5 h-1.5 rounded-full bg-brand-500 transition-all duration-300 ease-out ${
+                  className={`absolute -top-3 w-1.5 h-1.5 rounded-full bg-white0 transition-all duration-300 ease-out ${
                     isActive ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
                   }`}
                 ></div>
@@ -43,8 +43,8 @@ export const MainLayout: React.FC = () => {
                 <div 
                   className={`p-2 rounded-2xl transition-all duration-300 ease-out ${
                     isActive 
-                      ? 'bg-brand-700 text-brand-50 -translate-y-1 shadow-md shadow-brand-700/30' 
-                      : 'text-brand-700/50 hover:text-brand-700'
+                      ? 'bg-slate-900 text-white -translate-y-1 shadow-md shadow-slate-900/30' 
+                      : 'text-slate-900/50 hover:text-slate-900'
                   }`}
                 >
                   <item.icon className={`w-6 h-6 transition-transform duration-300 ${isActive ? 'scale-110' : 'scale-100'}`} />
@@ -53,7 +53,7 @@ export const MainLayout: React.FC = () => {
                 {/* Chữ text */}
                 <span 
                   className={`text-[10px] font-medium transition-all duration-300 ease-out ${
-                    isActive ? 'text-brand-700 opacity-100' : 'text-brand-700/50 opacity-100'
+                    isActive ? 'text-slate-900 opacity-100' : 'text-slate-900/50 opacity-100'
                   }`}
                 >
                   {item.name}

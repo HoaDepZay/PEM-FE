@@ -146,9 +146,9 @@ export const Profile: React.FC = () => {
 
   return (
     <div className="pt-8 px-5 pb-24 min-h-screen bg-transparent relative">
-      <h1 className="text-3xl font-bold text-brand-700 mb-8 tracking-tight">Hồ sơ cá nhân</h1>
+      <h1 className="text-3xl font-bold text-slate-900 mb-8 tracking-tight">Hồ sơ cá nhân</h1>
       
-      <div className="bg-brand-50 border border-brand-400/30 rounded-3xl p-6 mb-8 flex items-center gap-5 shadow-sm relative">
+      <div className="bg-white border border-slate-200 rounded-3xl p-6 mb-8 flex items-center gap-5 shadow-sm relative">
         <div 
           className="relative w-20 h-20 rounded-full cursor-pointer group shrink-0"
           onClick={() => fileInputRef.current?.click()}
@@ -157,10 +157,10 @@ export const Profile: React.FC = () => {
             <img 
               src={`${MINIO_URL}${user.avatar_url}`} 
               alt="Avatar" 
-              className="w-full h-full rounded-full object-cover border-2 border-brand-400/30"
+              className="w-full h-full rounded-full object-cover border-2 border-slate-200"
             />
           ) : (
-            <div className="w-full h-full bg-blue-100 rounded-full flex items-center justify-center text-3xl font-bold text-brand-700 border-2 border-brand-400/30">
+            <div className="w-full h-full bg-blue-100 rounded-full flex items-center justify-center text-3xl font-bold text-slate-900 border-2 border-slate-200">
               {user?.username ? user.username.charAt(0).toUpperCase() : 'U'}
             </div>
           )}
@@ -182,8 +182,8 @@ export const Profile: React.FC = () => {
         </div>
         
         <div className="flex-1 overflow-hidden">
-          <h2 className="text-xl font-bold text-brand-700 truncate">{user?.username}</h2>
-          <p className="text-brand-700/70 truncate">{user?.email}</p>
+          <h2 className="text-xl font-bold text-slate-900 truncate">{user?.username}</h2>
+          <p className="text-slate-900/70 truncate">{user?.email}</p>
         </div>
 
         <button 
@@ -191,32 +191,32 @@ export const Profile: React.FC = () => {
             setNewUsername(user?.username || '');
             setIsInfoModalOpen(true);
           }}
-          className="p-2 text-brand-700/50 hover:text-brand-700 hover:bg-brand-50 rounded-full transition-colors"
+          className="p-2 text-slate-900/50 hover:text-slate-900 hover:bg-white rounded-full transition-colors"
         >
           <Edit2 className="w-5 h-5" />
         </button>
       </div>
 
       <div className="space-y-3">
-        <Link to="/categories" className="w-full bg-brand-50 border border-brand-400/30 flex items-center gap-4 p-4 rounded-2xl text-brand-700 hover:bg-brand-100/50 transition-all active:scale-95 shadow-sm">
-          <div className="p-2 bg-brand-50 rounded-xl">
-            <Tags className="w-6 h-6 text-brand-700" />
+        <Link to="/categories" className="w-full bg-white border border-slate-200 flex items-center gap-4 p-4 rounded-2xl text-slate-900 hover:bg-slate-50 transition-all active:scale-95 shadow-sm">
+          <div className="p-2 bg-white rounded-xl">
+            <Tags className="w-6 h-6 text-slate-900" />
           </div>
           <span className="font-medium text-lg">Quản lý danh mục</span>
         </Link>
 
         <button 
           onClick={() => setIsPasswordModalOpen(true)}
-          className="w-full bg-brand-50 border border-brand-400/30 flex items-center gap-4 p-4 rounded-2xl text-brand-700 hover:bg-brand-100/50 transition-all active:scale-95 shadow-sm"
+          className="w-full bg-white border border-slate-200 flex items-center gap-4 p-4 rounded-2xl text-slate-900 hover:bg-slate-50 transition-all active:scale-95 shadow-sm"
         >
           <div className="p-2 bg-purple-50 rounded-xl">
-            <KeyRound className="w-6 h-6 text-brand-700" />
+            <KeyRound className="w-6 h-6 text-slate-900" />
           </div>
           <span className="font-medium text-lg">Đổi mật khẩu</span>
         </button>
 
-        <button className="w-full bg-brand-50 border border-brand-400/30 flex items-center gap-4 p-4 rounded-2xl text-brand-700 hover:bg-brand-100/50 transition-all active:scale-95 shadow-sm">
-          <div className="p-2 bg-brand-100 rounded-xl">
+        <button className="w-full bg-white border border-slate-200 flex items-center gap-4 p-4 rounded-2xl text-slate-900 hover:bg-slate-50 transition-all active:scale-95 shadow-sm">
+          <div className="p-2 bg-slate-100 rounded-xl">
             <Settings className="w-6 h-6 text-slate-600" />
           </div>
           <span className="font-medium text-lg">Cài đặt ứng dụng</span>
@@ -224,7 +224,7 @@ export const Profile: React.FC = () => {
 
         <button 
           onClick={logout}
-          className="w-full bg-brand-50 border border-rose-100 flex items-center gap-4 p-4 rounded-2xl text-rose-600 hover:bg-rose-50 transition-all active:scale-95 shadow-sm mt-4"
+          className="w-full bg-white border border-rose-100 flex items-center gap-4 p-4 rounded-2xl text-rose-600 hover:bg-rose-50 transition-all active:scale-95 shadow-sm mt-4"
         >
           <div className="p-2 bg-rose-50 rounded-xl">
             <LogOut className="w-6 h-6" />
@@ -236,14 +236,14 @@ export const Profile: React.FC = () => {
       {/* Change Info Modal */}
       {isInfoModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900 bg-opacity-50 backdrop-blur-sm">
-          <div className="bg-brand-50 rounded-3xl w-full max-w-md p-6 shadow-2xl relative">
+          <div className="bg-white rounded-3xl w-full max-w-md p-6 shadow-2xl relative">
             <button 
               onClick={() => setIsInfoModalOpen(false)}
-              className="absolute top-4 right-4 text-brand-700/50 hover:text-slate-600"
+              className="absolute top-4 right-4 text-slate-900/50 hover:text-slate-600"
             >
               ✕
             </button>
-            <h3 className="text-2xl font-bold text-brand-700 mb-6">Chỉnh sửa thông tin</h3>
+            <h3 className="text-2xl font-bold text-slate-900 mb-6">Chỉnh sửa thông tin</h3>
             
             {infoError && <div className="text-red-500 text-sm bg-red-50 p-3 rounded-lg mb-4">{infoError}</div>}
             {infoMessage && <div className="text-emerald-600 text-sm bg-emerald-50 p-3 rounded-lg mb-4">{infoMessage}</div>}
@@ -256,13 +256,13 @@ export const Profile: React.FC = () => {
                   required
                   value={newUsername}
                   onChange={e => setNewUsername(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-brand-400/30 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500"
                 />
               </div>
               <button
                 type="submit"
                 disabled={isUpdatingInfo}
-                className="w-full bg-brand-700 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50 mt-4"
+                className="w-full bg-slate-900 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50 mt-4"
               >
                 {isUpdatingInfo ? 'Đang cập nhật...' : 'Lưu thay đổi'}
               </button>
@@ -274,14 +274,14 @@ export const Profile: React.FC = () => {
       {/* Change Password Modal */}
       {isPasswordModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900 bg-opacity-50 backdrop-blur-sm">
-          <div className="bg-brand-50 rounded-3xl w-full max-w-md p-6 shadow-2xl relative">
+          <div className="bg-white rounded-3xl w-full max-w-md p-6 shadow-2xl relative">
             <button 
               onClick={() => setIsPasswordModalOpen(false)}
-              className="absolute top-4 right-4 text-brand-700/50 hover:text-slate-600"
+              className="absolute top-4 right-4 text-slate-900/50 hover:text-slate-600"
             >
               ✕
             </button>
-            <h3 className="text-2xl font-bold text-brand-700 mb-6">Đổi mật khẩu</h3>
+            <h3 className="text-2xl font-bold text-slate-900 mb-6">Đổi mật khẩu</h3>
             
             {pwdError && <div className="text-red-500 text-sm bg-red-50 p-3 rounded-lg mb-4">{pwdError}</div>}
             {pwdMessage && <div className="text-emerald-600 text-sm bg-emerald-50 p-3 rounded-lg mb-4">{pwdMessage}</div>}
@@ -294,12 +294,12 @@ export const Profile: React.FC = () => {
                   required
                   value={oldPassword}
                   onChange={e => setOldPassword(e.target.value)}
-                  className="w-full px-4 pr-10 py-3 rounded-xl border border-brand-400/30 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                  className="w-full px-4 pr-10 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500"
                 />
                 <button
                   type="button"
                   onClick={() => setShowOldPassword(!showOldPassword)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-brand-700/50 hover:text-slate-600 focus:outline-none"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-900/50 hover:text-slate-600 focus:outline-none"
                 >
                   {showOldPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
@@ -311,12 +311,12 @@ export const Profile: React.FC = () => {
                   required
                   value={newPassword}
                   onChange={e => setNewPassword(e.target.value)}
-                  className="w-full px-4 pr-10 py-3 rounded-xl border border-brand-400/30 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                  className="w-full px-4 pr-10 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500"
                 />
                 <button
                   type="button"
                   onClick={() => setShowNewPassword(!showNewPassword)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-brand-700/50 hover:text-slate-600 focus:outline-none"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-900/50 hover:text-slate-600 focus:outline-none"
                 >
                   {showNewPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
@@ -328,12 +328,12 @@ export const Profile: React.FC = () => {
                   required
                   value={confirmPassword}
                   onChange={e => setConfirmPassword(e.target.value)}
-                  className="w-full px-4 pr-10 py-3 rounded-xl border border-brand-400/30 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                  className="w-full px-4 pr-10 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500"
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-brand-700/50 hover:text-slate-600 focus:outline-none"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-900/50 hover:text-slate-600 focus:outline-none"
                 >
                   {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
@@ -341,7 +341,7 @@ export const Profile: React.FC = () => {
               <button
                 type="submit"
                 disabled={isChangingPwd}
-                className="w-full bg-brand-700 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50 mt-4"
+                className="w-full bg-slate-900 text-white font-bold py-3 rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50 mt-4"
               >
                 {isChangingPwd ? 'Đang xử lý...' : 'Xác nhận đổi mật khẩu'}
               </button>

@@ -120,7 +120,7 @@ export const CameraWidget: React.FC = () => {
   };
 
   return (
-    <div className={`w-full rounded-3xl overflow-hidden border border-brand-400/30 relative shadow-xl transition-all ${!imageSrc ? 'bg-slate-950 aspect-[3/4]' : 'bg-brand-50 flex flex-col'}`}>
+    <div className={`w-full rounded-3xl overflow-hidden border border-slate-200 relative shadow-xl transition-all ${!imageSrc ? 'bg-slate-950 aspect-[3/4]' : 'bg-white flex flex-col'}`}>
       {!imageSrc ? (
         <>
           <Webcam
@@ -134,10 +134,10 @@ export const CameraWidget: React.FC = () => {
           <div className="absolute bottom-6 w-full flex justify-center">
             <button
               onClick={capture}
-              className="w-16 h-16 bg-brand-50/10 rounded-full flex items-center justify-center border-[3px] border-white/80 backdrop-blur-md active:scale-90 transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+              className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center border-[3px] border-white/80 backdrop-blur-md active:scale-90 transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)]"
             >
-              <div className="w-12 h-12 bg-brand-50 rounded-full flex items-center justify-center shadow-inner">
-                <Camera className="text-brand-700 w-6 h-6" />
+              <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-inner">
+                <Camera className="text-slate-900 w-6 h-6" />
               </div>
             </button>
           </div>
@@ -145,11 +145,11 @@ export const CameraWidget: React.FC = () => {
       ) : (
         <div className="flex flex-col w-full h-full">
           {/* Image Preview Area */}
-          <div className="relative w-full aspect-[4/3] bg-brand-100/50 border-b border-brand-400/30">
+          <div className="relative w-full aspect-[4/3] bg-slate-50 border-b border-slate-200">
             <img src={imageSrc} alt="Captured" className="w-full h-full object-contain" />
             <button 
               onClick={retake}
-              className="absolute top-4 left-4 p-2.5 bg-brand-50/80 rounded-full text-brand-700 backdrop-blur-xl border border-brand-400/30 z-10 active:scale-90 transition-all shadow-sm"
+              className="absolute top-4 left-4 p-2.5 bg-white/80 rounded-full text-slate-900 backdrop-blur-xl border border-slate-200 z-10 active:scale-90 transition-all shadow-sm"
             >
               <X className="w-5 h-5" />
             </button>
@@ -158,7 +158,7 @@ export const CameraWidget: React.FC = () => {
           {/* Form Area */}
           <form 
             onSubmit={handleSubmit} 
-            className="p-5 flex flex-col gap-4 bg-brand-50"
+            className="p-5 flex flex-col gap-4 bg-white"
           >
             {/* Category Custom Dropdown */}
             <div className="relative w-full z-20">
@@ -167,14 +167,14 @@ export const CameraWidget: React.FC = () => {
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 className={`w-full flex items-center justify-between px-6 py-4 rounded-xl border transition-all ${
                   isDropdownOpen 
-                    ? 'bg-brand-50 border-brand-400 ring-4 ring-brand-100 shadow-sm' 
-                    : 'bg-brand-100/50 border-transparent shadow-inner hover:bg-brand-100'
+                    ? 'bg-white border-slate-300 ring-4 ring-slate-100 shadow-sm' 
+                    : 'bg-slate-50 border-transparent shadow-inner hover:bg-slate-100'
                 }`}
               >
-                <span className={`font-semibold ${!categoryId ? 'text-brand-700/50' : 'text-brand-700'}`}>
+                <span className={`font-semibold ${!categoryId ? 'text-slate-900/50' : 'text-slate-900'}`}>
                   {categories.find(c => c.category_id === categoryId)?.name || 'Chọn danh mục'}
                 </span>
-                <ChevronDown className={`w-5 h-5 text-brand-400 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180 text-brand-700' : ''}`} />
+                <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180 text-slate-900' : ''}`} />
               </button>
 
               {isDropdownOpen && (
@@ -186,10 +186,10 @@ export const CameraWidget: React.FC = () => {
                   ></div>
                   
                   {/* Dropdown Menu */}
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-brand-50 border border-brand-400/30 rounded-xl shadow-xl shadow-brand-700/10 overflow-hidden z-20 animate-in fade-in slide-in-from-top-2 duration-200">
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-xl shadow-xl shadow-slate-900/10 overflow-hidden z-20 animate-in fade-in slide-in-from-top-2 duration-200">
                     <div className="max-h-60 overflow-y-auto overscroll-contain">
                       {categories.length === 0 ? (
-                        <div className="px-6 py-4 text-brand-700/60 text-sm">Chưa có danh mục</div>
+                        <div className="px-6 py-4 text-slate-900/60 text-sm">Chưa có danh mục</div>
                       ) : (
                         categories.map((cat) => (
                           <button
@@ -201,12 +201,12 @@ export const CameraWidget: React.FC = () => {
                             }}
                             className={`w-full flex items-center justify-between px-6 py-3.5 text-left transition-colors ${
                               categoryId === cat.category_id 
-                                ? 'bg-brand-100 text-brand-700 font-bold' 
-                                : 'text-brand-700/80 hover:bg-brand-100/50 hover:text-brand-700 font-medium'
+                                ? 'bg-slate-100 text-slate-900 font-bold' 
+                                : 'text-slate-900/80 hover:bg-slate-50 hover:text-slate-900 font-medium'
                             }`}
                           >
                             <span>{cat.name}</span>
-                            {categoryId === cat.category_id && <Check className="w-5 h-5 text-brand-700" />}
+                            {categoryId === cat.category_id && <Check className="w-5 h-5 text-slate-900" />}
                           </button>
                         ))
                       )}
@@ -224,7 +224,7 @@ export const CameraWidget: React.FC = () => {
                 placeholder="Số tiền..."
                 value={amount}
                 onChange={handleAmountChange}
-                className="w-full bg-brand-100/50 text-brand-700 placeholder-brand-700/40 text-2xl font-black px-6 py-4 rounded-2xl border border-transparent focus:outline-none focus:bg-brand-50 focus:border-brand-400 focus:ring-4 focus:ring-brand-100 transition-all shadow-inner"
+                className="w-full bg-slate-50 text-slate-900 placeholder-brand-700/40 text-2xl font-black px-6 py-4 rounded-2xl border border-transparent focus:outline-none focus:bg-white focus:border-slate-300 focus:ring-4 focus:ring-slate-100 transition-all shadow-inner"
                 required
               />
               
@@ -233,14 +233,14 @@ export const CameraWidget: React.FC = () => {
                 placeholder="Ghi chú (Tùy chọn)..."
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
-                className="w-full bg-brand-100/50 text-brand-700 placeholder-brand-700/40 text-base font-medium px-6 py-4 rounded-xl border border-transparent focus:outline-none focus:bg-brand-50 focus:border-brand-400 focus:ring-4 focus:ring-brand-100 transition-all shadow-inner"
+                className="w-full bg-slate-50 text-slate-900 placeholder-brand-700/40 text-base font-medium px-6 py-4 rounded-xl border border-transparent focus:outline-none focus:bg-white focus:border-slate-300 focus:ring-4 focus:ring-slate-100 transition-all shadow-inner"
               />
             </div>
 
             <button
               type="submit"
               disabled={isSubmitting || !amount || !categoryId}
-              className="w-full bg-gradient-to-r from-brand-700 to-brand-500 hover:from-brand-700/90 hover:to-brand-500/90 disabled:from-brand-100 disabled:to-brand-100 text-white disabled:text-brand-700/40 font-bold py-4 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-brand-500/30 disabled:shadow-none active:scale-95 mt-2"
+              className="w-full bg-gradient-to-r from-slate-900 to-slate-700 hover:from-slate-900/90 hover:to-slate-700/90 disabled:from-slate-100 disabled:to-slate-100 text-white disabled:text-slate-900/40 font-bold py-4 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-slate-900/20 disabled:shadow-none active:scale-95 mt-2"
             >
               {isSubmitting ? (
                 <span className="animate-pulse flex items-center gap-2">
