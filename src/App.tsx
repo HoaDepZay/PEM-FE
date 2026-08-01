@@ -4,17 +4,17 @@ import { ProtectedRoute } from './components/layout/ProtectedRoute'
 import { MainLayout } from './components/layout/MainLayout'
 
 // Pages
-import { Login } from './pages/Login'
-import { Register } from './pages/Register'
-import { VerifyEmail } from './pages/VerifyEmail'
+import { Login } from './pages/Auth/Login'
+import { Register } from './pages/Auth/Register'
+import { VerifyEmail } from './pages/Auth/VerifyEmail'
+import { ForgotPassword } from './pages/Auth/ForgotPassword'
+import { ResetPassword } from './pages/Auth/ResetPassword'
 import { Locker } from './pages/Locker'
 import { History } from './pages/History'
 import { Analytics } from './pages/Analytics'
 import { Budget } from './pages/Budget'
 import { Profile } from './pages/Profile'
-import { Categories } from './pages/Categories'
-import { ForgotPassword } from './pages/ForgotPassword'
-import { ResetPassword } from './pages/ResetPassword'
+import { Categories } from './pages/Profile/Categories'
 
 function App() {
   return (

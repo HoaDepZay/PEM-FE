@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import { LogOut, Settings, Tags, Camera, KeyRound, Loader2, Edit2, Eye, EyeOff } from 'lucide-react';
 import { Link } from 'react-router-dom';
 

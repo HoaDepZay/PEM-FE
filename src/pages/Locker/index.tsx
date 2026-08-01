@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
-import { CameraWidget } from '../components/ui/CameraWidget';
-import { ICON_MAP } from '../utils/icons';
-import { Tag } from 'lucide-react';
+import { CameraWidget } from '../../components/ui/CameraWidget';
+import { Inbox } from 'lucide-react';
+import { Spinner } from '../../components/ui/Spinner';
+import { EmptyState } from '../../components/ui/EmptyState';
+import { ExpenseCard } from '../../components/ui/ExpenseCard';
 
 interface Expense {
   expense_id: string;
@@ -22,12 +24,13 @@ interface Category {
 }
 
 export const Locker: React.FC = () => {
-  const { user, token } = useAuth();
+  const { token } = useAuth();
   
   const [recentExpenses, setRecentExpenses] = useState<Expense[]>([]);
   const [categories, setCategories] = useState<Record<string, Category>>({});
   const [isLoading, setIsLoading] = useState(true);
 
+  const MINIO_URL = import.meta.env.VITE_MINIO_URL || 'http://100.109.65.2:9000';
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,7 +38,6 @@ export const Locker: React.FC = () => {
       try {
         const apiUrl = import.meta.env.VITE_API_URL;
         
-        // Fetch Categories
         const catRes = await fetch(`${apiUrl}/categories/`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -48,13 +50,11 @@ export const Locker: React.FC = () => {
         }
         setCategories(catMap);
 
-        // Fetch Expenses
         const expRes = await fetch(`${apiUrl}/expenses/`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         const expData = await expRes.json();
         if (expData.data) {
-          // Take top 3 most recent
           setRecentExpenses(expData.data.slice(0, 3));
         }
       } catch (error) {
@@ -79,8 +79,6 @@ export const Locker: React.FC = () => {
 
   return (
     <div className="pt-8 px-5 pb-24 space-y-8">
-
-
       {/* Embedded Camera */}
       <div>
         <h3 className="text-lg font-bold text-slate-900 mb-4 px-1 flex items-center gap-2">
@@ -101,40 +99,24 @@ export const Locker: React.FC = () => {
         </div>
         
         {isLoading ? (
-           <div className="flex justify-center py-5">
-             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-slate-800"></div>
-           </div>
+           <Spinner />
         ) : recentExpenses.length === 0 ? (
-          <div className="bg-white border border-slate-200 rounded-3xl p-8 text-center shadow-sm">
-            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3">
-               <span className="text-2xl opacity-50">📭</span>
-            </div>
-            <p className="text-slate-900/60 font-medium">Chưa có giao dịch nào được ghi nhận.</p>
-          </div>
+          <EmptyState 
+            icon={Inbox} 
+            message="Chưa có giao dịch nào được ghi nhận." 
+          />
         ) : (
           <div className="space-y-3">
-            {recentExpenses.map((exp) => {
-              const cat = categories[exp.category_id];
-              const IconComponent = cat && cat.icon ? ICON_MAP[cat.icon] || Tag : Tag;
-              const color = cat?.color || '#5D7B6F';
-              
-              return (
-                <div key={exp.expense_id} className="bg-white border border-slate-200 shadow-sm p-4 rounded-2xl flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ backgroundColor: `${color}15`, color: color }}>
-                      <IconComponent className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-slate-900">{cat?.name || 'Chưa phân loại'}</h4>
-                      <p className="text-xs text-slate-900/60">{formatDate(exp.expense_date)}</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <span className="font-bold text-slate-900">{formatCurrency(exp.amount)}</span>
-                  </div>
-                </div>
-              );
-            })}
+            {recentExpenses.map((exp) => (
+              <ExpenseCard 
+                key={exp.expense_id}
+                expense={exp}
+                category={categories[exp.category_id]}
+                minioUrl={MINIO_URL}
+                formatCurrency={formatCurrency}
+                formatDate={formatDate}
+              />
+            ))}
           </div>
         )}
       </div>

@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '../../components/ui/Button';
+import { Spinner } from '../../components/ui/Spinner';
+import { PageHeader } from '../../components/ui/PageHeader';
 import { 
   ArrowLeft, Plus, Edit2, Trash2, Tag,
   ShoppingCart, Coffee, Utensils, Car, Home,
@@ -7,7 +10,7 @@ import {
   Music, Film, Smartphone, Gift, Briefcase
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 
 interface Category {
   category_id: string;
@@ -25,6 +28,7 @@ const ICON_MAP: Record<string, LucideIcon> = {
   Music, Film, Smartphone, Gift, Briefcase
 };
 const AVAILABLE_ICONS = Object.keys(ICON_MAP);
+
 
 export const Categories: React.FC = () => {
   const navigate = useNavigate();
@@ -120,15 +124,16 @@ export const Categories: React.FC = () => {
 
       {!isFormOpen ? (
         <>
-          <button 
+          <Button 
+            fullWidth
             onClick={() => { setEditingId(null); setFormData({ name: '', icon: 'Tag', color: '#3B82F6' }); setIsFormOpen(true); }}
-            className="w-full bg-slate-900 hover:bg-blue-700 text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-2 mb-6 shadow-md transition-all active:scale-95"
+            className="mb-6"
           >
             <Plus className="w-5 h-5" /> Thêm danh mục mới
-          </button>
+          </Button>
 
           {loading ? (
-            <p className="text-center text-slate-900/70">Đang tải...</p>
+            <Spinner />
           ) : (
             <div className="space-y-3">
               {categories.map(cat => {
@@ -163,7 +168,6 @@ export const Categories: React.FC = () => {
               type="text" 
               value={formData.name}
               onChange={(e) => setFormData({...formData, name: e.target.value})}
-              className="w-full bg-slate-50 p-4 rounded-xl text-slate-900 border border-slate-200 focus:outline-none focus:border-slate-800 focus:ring-1 focus:ring-brand-500 transition-all"
               required
               placeholder="VD: Ăn sáng, Cà phê..."
             />
@@ -204,8 +208,8 @@ export const Categories: React.FC = () => {
           </div>
 
           <div className="flex gap-4 pt-4">
-            <button type="button" onClick={() => setIsFormOpen(false)} className="flex-1 py-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold transition-all">Hủy</button>
-            <button type="submit" className="flex-1 py-4 rounded-xl bg-slate-900 hover:bg-blue-700 text-white font-semibold shadow-md transition-all">Lưu</button>
+            <Button type="button" variant="outline" fullWidth onClick={() => setIsFormOpen(false)}>Hủy</Button>
+            <Button type="submit" variant="primary" fullWidth>Lưu</Button>
           </div>
         </form>
       )}
