@@ -13,3 +13,21 @@
     @apply bg-slate-50 text-slate-900 antialiased m-0 p-0;
   }
 }
+
+/* react-day-picker custom styles for Light Mode fintech */
+.rdp {
+  --rdp-cell-size: 40px;
+  --rdp-accent-color: #0f172a;
+  --rdp-background-color: #f1f5f9;
+  --rdp-accent-color-dark: #0f172a;
+  --rdp-background-color-dark: #f1f5f9;
+  --rdp-outline: 2px solid var(--rdp-accent-color);
+  --rdp-outline-selected: 2px solid var(--rdp-accent-color);
+  margin: 0 !important;
+}
+.rdp-day_selected {
+  font-weight: bold;
+}
+.rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
+  background-color: var(--rdp-background-color);
+}
