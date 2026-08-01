@@ -145,13 +145,13 @@ export const CameraWidget: React.FC = () => {
           </div>
         </>
       ) : (
-        <div className="flex flex-col w-full h-full">
+        <div className="flex flex-col w-full h-full bg-slate-50">
           {/* Image Preview Area */}
-          <div className="relative w-full aspect-[3/4] bg-slate-950 rounded-b-3xl overflow-hidden shadow-sm z-10">
+          <div className="relative w-full h-48 bg-slate-950 rounded-b-3xl overflow-hidden shadow-sm z-10 shrink-0">
             <img src={imageSrc} alt="Captured" className="w-full h-full object-cover" />
             <button 
               onClick={retake}
-              className="absolute top-4 left-4 p-2.5 bg-white/80 rounded-full text-slate-900 backdrop-blur-xl border border-slate-200 z-10 active:scale-90 transition-all shadow-sm"
+              className="absolute top-4 left-4 p-2 bg-white/80 rounded-full text-slate-900 backdrop-blur-xl border border-slate-200 z-10 active:scale-90 transition-all shadow-sm flex items-center justify-center"
             >
               <X className="w-5 h-5" />
             </button>
@@ -160,17 +160,17 @@ export const CameraWidget: React.FC = () => {
           {/* Form Area */}
           <form 
             onSubmit={handleSubmit} 
-            className="p-5 flex flex-col gap-4 bg-white"
+            className="p-4 flex flex-col gap-3 bg-slate-50 flex-1"
           >
             {/* Category Custom Dropdown */}
-            <div className="relative w-full z-20">
+            <div className="relative z-20">
               <button
                 type="button"
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className={`w-full flex items-center justify-between px-6 py-4 rounded-xl border border-slate-900 transition-all ${
+                className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl border border-slate-200 transition-all ${
                   isDropdownOpen 
                     ? 'bg-white ring-4 ring-slate-100 shadow-sm' 
-                    : 'bg-transparent shadow-sm hover:bg-slate-50'
+                    : 'bg-white shadow-sm hover:bg-slate-50'
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -246,7 +246,7 @@ export const CameraWidget: React.FC = () => {
                 placeholder="Số tiền..."
                 value={amount}
                 onChange={handleAmountChange}
-                className="w-full bg-transparent text-slate-900 placeholder-slate-400 text-xl font-bold px-6 py-4 rounded-xl border border-slate-900 focus:outline-none focus:ring-4 focus:ring-slate-100 transition-all shadow-sm"
+                className="w-full bg-white text-slate-900 placeholder-slate-400 text-xl font-bold px-4 py-3.5 rounded-2xl border border-slate-200 focus:outline-none focus:border-slate-900 focus:ring-4 focus:ring-slate-100 transition-all shadow-sm"
                 required
               />
               
@@ -255,14 +255,14 @@ export const CameraWidget: React.FC = () => {
                 placeholder="Ghi chú (Tùy chọn)..."
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
-                className="w-full bg-transparent text-slate-900 placeholder-slate-400 text-base font-bold px-6 py-4 rounded-xl border border-slate-900 focus:outline-none focus:ring-4 focus:ring-slate-100 transition-all shadow-sm"
+                className="w-full bg-white text-slate-900 placeholder-slate-400 text-base font-bold px-4 py-3.5 rounded-2xl border border-slate-200 focus:outline-none focus:border-slate-900 focus:ring-4 focus:ring-slate-100 transition-all shadow-sm"
               />
             </div>
 
             <button
               type="submit"
               disabled={isSubmitting || !amount || !categoryId}
-              className="w-full bg-gradient-to-r from-slate-900 to-slate-700 hover:from-slate-900/90 hover:to-slate-700/90 disabled:from-slate-100 disabled:to-slate-100 text-white disabled:text-slate-900/40 font-bold py-4 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-slate-900/20 disabled:shadow-none active:scale-95 mt-2"
+              className="w-full bg-gradient-to-r from-slate-900 to-slate-800 hover:from-slate-800 hover:to-slate-700 disabled:from-slate-200 disabled:to-slate-200 text-white disabled:text-slate-400 font-bold py-3.5 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-slate-900/20 disabled:shadow-none active:scale-95 mt-1"
             >
               {isSubmitting ? (
                 <span className="animate-pulse flex items-center gap-2">
