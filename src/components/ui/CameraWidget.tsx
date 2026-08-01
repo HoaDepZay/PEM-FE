@@ -21,6 +21,7 @@ export const CameraWidget: React.FC = () => {
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isCameraActive, setIsCameraActive] = useState(false);
 
   const { token } = useAuth();
 
@@ -62,6 +63,7 @@ export const CameraWidget: React.FC = () => {
     setImageSrc(null);
     setAmount('');
     setNote('');
+    setIsCameraActive(false);
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -122,26 +124,41 @@ export const CameraWidget: React.FC = () => {
   return (
     <div className={`w-full rounded-3xl overflow-hidden border border-slate-200 relative shadow-xl transition-all ${!imageSrc ? 'bg-slate-950 aspect-[3/4]' : 'bg-white flex flex-col'}`}>
       {!imageSrc ? (
-        <>
-          <Webcam
-            audio={false}
-            ref={webcamRef}
-            screenshotFormat="image/jpeg"
-            videoConstraints={videoConstraints}
-            className="w-full h-full object-cover"
-          />
-          {/* Nút chụp hình */}
-          <div className="absolute bottom-6 w-full flex justify-center">
-            <button
-              onClick={capture}
-              className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center border-[3px] border-white/80 backdrop-blur-md active:scale-90 transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+        !isCameraActive ? (
+          <div className="w-full h-full flex flex-col items-center justify-center bg-slate-50 gap-5 min-h-[400px]">
+            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-sm border border-slate-200">
+              <Camera className="w-10 h-10 text-slate-300" />
+            </div>
+            <button 
+              onClick={() => setIsCameraActive(true)}
+              className="px-6 py-3.5 bg-slate-900 text-white rounded-2xl font-bold shadow-md active:scale-95 transition-all"
             >
-              <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-inner">
-                <Camera className="text-slate-900 w-6 h-6" />
-              </div>
+              Bật Camera để chụp hóa đơn
             </button>
+            <p className="text-slate-900/40 text-sm px-8 text-center">Ứng dụng cần quyền Camera để chụp ảnh hóa đơn/sản phẩm</p>
           </div>
-        </>
+        ) : (
+          <>
+            <Webcam
+              audio={false}
+              ref={webcamRef}
+              screenshotFormat="image/jpeg"
+              videoConstraints={videoConstraints}
+              className="w-full h-full object-cover"
+            />
+            {/* Nút chụp hình */}
+            <div className="absolute bottom-6 w-full flex justify-center">
+              <button
+                onClick={capture}
+                className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center border-[3px] border-white/80 backdrop-blur-md active:scale-90 transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+              >
+                <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-inner">
+                  <Camera className="text-slate-900 w-6 h-6" />
+                </div>
+              </button>
+            </div>
+          </>
+        )
       ) : (
         <div className="flex flex-col w-full h-full">
           {/* Image Preview Area */}
