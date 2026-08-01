@@ -4,7 +4,7 @@ import { Calendar } from 'lucide-react';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { Spinner } from '../../components/ui/Spinner';
 import { EmptyState } from '../../components/ui/EmptyState';
-import { ExpenseCard } from '../../components/ui/ExpenseCard';
+import { ExpensePostCard } from '../../components/ui/ExpensePostCard';
 
 interface Expense {
   expense_id: string;
@@ -96,9 +96,9 @@ export const History: React.FC = () => {
           message="Chưa có giao dịch nào. Hãy tạo giao dịch đầu tiên của bạn!" 
         />
       ) : (
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {expenses.map((expense) => (
-            <ExpenseCard 
+            <ExpensePostCard 
               key={expense.expense_id}
               expense={expense}
               category={categories[expense.category_id]}
