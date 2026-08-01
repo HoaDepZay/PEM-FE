@@ -9,6 +9,7 @@ import { getCategoryFromMap } from '../../utils/uuid';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/style.css';
 import { vi } from 'date-fns/locale';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface Expense {
   expense_id: string;
@@ -131,8 +132,16 @@ export const History: React.FC = () => {
       />
 
       {/* Filter Panel */}
-      {showFilters && (
-        <div className="mb-6 bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-col gap-6 animate-in slide-in-from-top-4 fade-in">
+      <AnimatePresence>
+        {showFilters && (
+          <motion.div 
+            initial={{ height: 0, opacity: 0, marginTop: 0 }}
+            animate={{ height: 'auto', opacity: 1, marginTop: 24 }}
+            exit={{ height: 0, opacity: 0, marginTop: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            className="overflow-hidden"
+          >
+            <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-col gap-6 mb-6">
           {/* Category Filter */}
           <div>
             <h3 className="text-sm font-bold text-slate-900 mb-3">Danh mục</h3>
@@ -205,7 +214,9 @@ export const History: React.FC = () => {
             </div>
           </div>
         </div>
+        </motion.div>
       )}
+      </AnimatePresence>
 
       {isLoading ? (
         <Spinner />
