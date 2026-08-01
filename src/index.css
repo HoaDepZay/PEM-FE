@@ -6,13 +6,13 @@
   --color-brand-400: #B0D4B8;
   --color-brand-500: #A4C3A2;
   --color-brand-700: #5D7B6F;
-  --font-sans: 'Outfit', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-sans: 'Montserrat', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
 @layer base {
   body {
     @apply bg-slate-50 text-slate-900 antialiased m-0 p-0;
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Montserrat', sans-serif;
   }
 }
 
