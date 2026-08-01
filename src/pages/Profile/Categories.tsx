@@ -120,49 +120,18 @@ export const Categories: React.FC = () => {
         <h1 className="text-2xl font-bold tracking-tight">Quản lý Danh mục</h1>
       </div>
 
-      {!isFormOpen ? (
-        <>
-          <Button 
-            fullWidth
-            onClick={() => { setEditingId(null); setFormData({ name: '', icon: 'Tag', color: '#3B82F6', daily_budget: '' }); setIsFormOpen(true); }}
-            className="mb-6"
-          >
-            <Plus className="w-5 h-5" /> Thêm danh mục mới
-          </Button>
+      {!isFormOpen && (
+        <Button 
+          fullWidth
+          onClick={() => { setEditingId(null); setFormData({ name: '', icon: 'Tag', color: '#3B82F6', daily_budget: '' }); setIsFormOpen(true); }}
+          className="mb-6"
+        >
+          <Plus className="w-5 h-5" /> Thêm danh mục mới
+        </Button>
+      )}
 
-          {loading ? (
-            <Spinner />
-          ) : (
-            <div className="space-y-3">
-              {categories.map(cat => {
-                const IconComponent = ICON_MAP[cat.icon] || Tag;
-                return (
-                  <div key={cat.category_id} className="bg-white border border-slate-200 shadow-sm p-4 rounded-2xl flex justify-between items-center transition-all hover:shadow-md">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-full flex items-center justify-center shadow-inner" style={{ backgroundColor: `${cat.color}15`, color: cat.color }}>
-                         <IconComponent className="w-6 h-6" />
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="font-semibold text-lg text-slate-900">{cat.name}</span>
-                        {cat.daily_budget != null && (
-                          <span className="text-sm font-medium text-slate-500">Ngân sách ngày: {cat.daily_budget.toLocaleString('vi-VN')}đ</span>
-                        )}
-                      </div>
-                    </div>
-                  {cat.user_id && (
-                    <div className="flex gap-2">
-                      <button onClick={() => openEdit(cat)} className="p-2 text-slate-9000 bg-white rounded-xl hover:bg-blue-100 transition-colors"><Edit2 className="w-5 h-5"/></button>
-                      <button onClick={() => handleDelete(cat.category_id)} className="p-2 text-rose-500 bg-rose-50 rounded-xl hover:bg-rose-100 transition-colors"><Trash2 className="w-5 h-5"/></button>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-            </div>
-          )}
-        </>
-      ) : (
-        <form onSubmit={handleSubmit} className="bg-white border border-slate-200 shadow-md p-6 rounded-3xl space-y-6">
+      {isFormOpen && (
+        <form onSubmit={handleSubmit} className="bg-white border border-slate-200 shadow-md p-6 rounded-3xl space-y-6 mb-8">
           <h2 className="text-xl font-bold text-slate-900">{editingId ? 'Sửa danh mục' : 'Thêm danh mục mới'}</h2>
           
           <div>
@@ -237,6 +206,38 @@ export const Categories: React.FC = () => {
             <Button type="submit" variant="primary" fullWidth>Lưu</Button>
           </div>
         </form>
+      )}
+
+      {loading ? (
+        <Spinner />
+      ) : (
+        <div className="space-y-3">
+          <h2 className="text-xl font-bold text-slate-900 mb-4">Danh sách danh mục</h2>
+          {categories.map(cat => {
+            const IconComponent = ICON_MAP[cat.icon] || Tag;
+            return (
+              <div key={cat.category_id} className="bg-white border border-slate-200 shadow-sm p-4 rounded-2xl flex justify-between items-center transition-all hover:shadow-md">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center shadow-inner" style={{ backgroundColor: `${cat.color}15`, color: cat.color }}>
+                     <IconComponent className="w-6 h-6" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="font-semibold text-lg text-slate-900">{cat.name}</span>
+                    {cat.daily_budget != null && (
+                      <span className="text-sm font-medium text-slate-500">Ngân sách ngày: {cat.daily_budget.toLocaleString('vi-VN')}đ</span>
+                    )}
+                  </div>
+                </div>
+              {cat.user_id && (
+                <div className="flex gap-2">
+                  <button onClick={() => openEdit(cat)} className="p-2 text-slate-9000 bg-white rounded-xl hover:bg-blue-100 transition-colors"><Edit2 className="w-5 h-5"/></button>
+                  <button onClick={() => handleDelete(cat.category_id)} className="p-2 text-rose-500 bg-rose-50 rounded-xl hover:bg-rose-100 transition-colors"><Trash2 className="w-5 h-5"/></button>
+                </div>
+              )}
+            </div>
+          );
+        })}
+        </div>
       )}
     </div>
   );
