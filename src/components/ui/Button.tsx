@@ -20,9 +20,9 @@ export const Button: React.FC<ButtonProps> = ({
   const widthStyle = fullWidth ? "w-full" : "";
   
   const variants = {
-    primary: "bg-brand-500 text-white hover:bg-brand-600 shadow-brand-500/25",
-    secondary: "bg-slate-900 text-white hover:bg-slate-800",
-    outline: "border-2 border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50",
+    primary: "bg-slate-900 text-white hover:bg-slate-800 shadow-slate-900/25",
+    secondary: "bg-slate-800 text-white hover:bg-slate-700",
+    outline: "border-2 border-slate-200 text-slate-900 hover:border-slate-900 hover:bg-slate-50",
     danger: "bg-rose-500 text-white hover:bg-rose-600 shadow-rose-500/25"
   };
 
