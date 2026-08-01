@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { apiFetch } from '../../utils/api';
 import { LogOut, Settings, Tags, Camera, KeyRound, Loader2, Edit2, Eye, EyeOff } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -15,9 +16,7 @@ export const Profile: React.FC = () => {
     const fetchProfile = async () => {
       if (!token) return;
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/profile/me`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const res = await apiFetch(`/profile/me`);
         const data = await res.json();
         if (data.success && data.data) {
           updateUser(data.data);
@@ -57,11 +56,8 @@ export const Profile: React.FC = () => {
     formData.append('avatar', file);
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/profile/avatar`, {
+      const res = await apiFetch(`/profile/avatar`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
         body: formData
       });
       const data = await res.json();
@@ -102,11 +98,10 @@ export const Profile: React.FC = () => {
 
     setIsChangingPwd(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/change-password`, {
+      const res = await apiFetch(`/auth/change-password`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ old_password: oldPassword, new_password: newPassword })
       });
@@ -139,11 +134,10 @@ export const Profile: React.FC = () => {
 
     setIsUpdatingInfo(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/profile/info`, {
+      const res = await apiFetch(`/profile/info`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ username: newUsername })
       });

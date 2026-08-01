@@ -10,12 +10,14 @@ import {
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { apiFetch } from '../../utils/api';
 
 interface Category {
   category_id: string;
   name: string;
   icon: string;
   color: string;
+  daily_budget?: number;
   user_id?: string;
 }
 
@@ -39,14 +41,11 @@ export const Categories: React.FC = () => {
   // Form state
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [formData, setFormData] = useState({ name: '', icon: 'Tag', color: '#3B82F6' });
+  const [formData, setFormData] = useState<{name: string, icon: string, color: string, daily_budget: string | number}>({ name: '', icon: 'Tag', color: '#3B82F6', daily_budget: '' });
 
   const fetchCategories = async () => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const res = await fetch(`${apiUrl}/categories/`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
+      const res = await apiFetch(`/categories/`);
       if (res.ok) {
         const data = await res.json();
         setCategories(data.data || []);
@@ -65,24 +64,26 @@ export const Categories: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name.trim()) return;
-
-    const apiUrl = import.meta.env.VITE_API_URL;
-    const url = editingId ? `${apiUrl}/categories/${editingId}` : `${apiUrl}/categories/`;
     const method = editingId ? 'PUT' : 'POST';
 
+    const payload = {
+      ...formData,
+      daily_budget: formData.daily_budget !== '' ? Number(formData.daily_budget) : null
+    };
+
     try {
-      const res = await fetch(url, {
+      const endpoint = editingId ? `/categories/${editingId}` : `/categories/`;
+      const res = await apiFetch(endpoint, {
         method,
         headers: {
-          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(payload)
       });
       if (res.ok) {
         setIsFormOpen(false);
         setEditingId(null);
-        setFormData({ name: '', icon: 'Tag', color: '#3B82F6' });
+        setFormData({ name: '', icon: 'Tag', color: '#3B82F6', daily_budget: '' });
         fetchCategories();
       }
     } catch (err) {
@@ -94,10 +95,8 @@ export const Categories: React.FC = () => {
   const handleDelete = async (id: string) => {
     if (!confirm('Bạn có chắc chắn muốn xóa danh mục này?')) return;
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
-      await fetch(`${apiUrl}/categories/${id}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
+      await apiFetch(`/categories/${id}`, {
+        method: 'DELETE'
       });
       fetchCategories();
     } catch (err) {
@@ -107,7 +106,7 @@ export const Categories: React.FC = () => {
 
   const openEdit = (cat: Category) => {
     setEditingId(cat.category_id);
-    setFormData({ name: cat.name, icon: cat.icon || 'Tag', color: cat.color || '#3B82F6' });
+    setFormData({ name: cat.name, icon: cat.icon || 'Tag', color: cat.color || '#3B82F6', daily_budget: cat.daily_budget ?? '' });
     setIsFormOpen(true);
   };
 
@@ -125,7 +124,7 @@ export const Categories: React.FC = () => {
         <>
           <Button 
             fullWidth
-            onClick={() => { setEditingId(null); setFormData({ name: '', icon: 'Tag', color: '#3B82F6' }); setIsFormOpen(true); }}
+            onClick={() => { setEditingId(null); setFormData({ name: '', icon: 'Tag', color: '#3B82F6', daily_budget: '' }); setIsFormOpen(true); }}
             className="mb-6"
           >
             <Plus className="w-5 h-5" /> Thêm danh mục mới
@@ -143,7 +142,12 @@ export const Categories: React.FC = () => {
                       <div className="w-12 h-12 rounded-full flex items-center justify-center shadow-inner" style={{ backgroundColor: `${cat.color}15`, color: cat.color }}>
                          <IconComponent className="w-6 h-6" />
                       </div>
-                      <span className="font-semibold text-lg text-slate-900">{cat.name}</span>
+                      <div className="flex flex-col">
+                        <span className="font-semibold text-lg text-slate-900">{cat.name}</span>
+                        {cat.daily_budget != null && (
+                          <span className="text-sm font-medium text-slate-500">Ngân sách ngày: {cat.daily_budget.toLocaleString('vi-VN')}đ</span>
+                        )}
+                      </div>
                     </div>
                   {cat.user_id && (
                     <div className="flex gap-2">
@@ -169,6 +173,17 @@ export const Categories: React.FC = () => {
               onChange={(e) => setFormData({...formData, name: e.target.value})}
               required
               placeholder="VD: Ăn sáng, Cà phê..."
+              className="w-full bg-slate-50 text-slate-900 placeholder-slate-400 text-lg font-bold px-4 py-3.5 rounded-2xl border border-slate-200 focus:outline-none focus:border-slate-900 focus:ring-4 focus:ring-slate-100 transition-all shadow-sm"
+            />
+          </div>
+
+          <div>
+            <label className="block text-slate-700 font-bold mb-3 text-sm uppercase tracking-wider">Ngân sách trong ngày (Không bắt buộc)</label>
+            <input 
+              type="number" 
+              value={formData.daily_budget}
+              onChange={(e) => setFormData({...formData, daily_budget: e.target.value})}
+              placeholder="VD: 100000"
               className="w-full bg-slate-50 text-slate-900 placeholder-slate-400 text-lg font-bold px-4 py-3.5 rounded-2xl border border-slate-200 focus:outline-none focus:border-slate-900 focus:ring-4 focus:ring-slate-100 transition-all shadow-sm"
             />
           </div>

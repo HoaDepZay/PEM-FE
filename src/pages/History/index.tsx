@@ -12,6 +12,7 @@ import { DayPicker, type DateRange } from 'react-day-picker';
 import 'react-day-picker/style.css';
 import { vi } from 'date-fns/locale';
 import { motion, AnimatePresence } from 'framer-motion';
+import { apiFetch } from '../../utils/api';
 
 interface Expense {
   expense_id: string;
@@ -48,11 +49,7 @@ export const History: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        
-        const catRes = await fetch(`${apiUrl}/categories/`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const catRes = await apiFetch(`/categories/`);
         const catData = await catRes.json();
         const catMap: Record<string, Category> = {};
         if (catData.data) {
@@ -62,9 +59,7 @@ export const History: React.FC = () => {
         }
         setCategories(catMap);
 
-        const expRes = await fetch(`${apiUrl}/expenses/`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const expRes = await apiFetch(`/expenses/`);
         const expData = await expRes.json();
         if (expData.data) {
           setExpenses(expData.data);

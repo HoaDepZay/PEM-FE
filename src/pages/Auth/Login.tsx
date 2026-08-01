@@ -33,7 +33,7 @@ export const Login: React.FC = () => {
         throw new Error(data.message || 'Login failed');
       }
 
-      login(data.data.token, data.data.user);
+      login(data.data.token, data.data.refresh_token, data.data.user);
       navigate('/');
     } catch (err: any) {
       setError(err.message);

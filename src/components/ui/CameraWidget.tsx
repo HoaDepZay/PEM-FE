@@ -3,6 +3,7 @@ import Webcam from 'react-webcam';
 import { Camera, Send, X, ChevronDown, Check, Tag } from 'lucide-react';
 import imageCompression from 'browser-image-compression';
 import { useAuth } from '../../context/AuthContext';
+import { apiFetch } from '../../utils/api';
 import { ICON_MAP } from '../../utils/icons';
 
 interface Category {
@@ -29,10 +30,7 @@ export const CameraWidget: React.FC = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const res = await fetch(`${apiUrl}/categories/`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const res = await apiFetch(`/categories/`);
         if (res.ok) {
           const data = await res.json();
           setCategories(data.data || []);
@@ -89,12 +87,8 @@ export const CameraWidget: React.FC = () => {
       formData.append('category_id', categoryId);
       formData.append('note', note);
       
-      const apiUrl = import.meta.env.VITE_API_URL;
-      const response = await fetch(`${apiUrl}/expenses/`, {
+      const response = await apiFetch(`/expenses/`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
         body: formData,
       });
 

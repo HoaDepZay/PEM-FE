@@ -7,6 +7,7 @@ import { Spinner } from '../../components/ui/Spinner';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { ExpenseCard } from '../../components/ui/ExpenseCard';
 import { getCategoryFromMap } from '../../utils/uuid';
+import { apiFetch } from '../../utils/api';
 
 interface Expense {
   expense_id: string;
@@ -37,11 +38,7 @@ export const Locker: React.FC = () => {
     const fetchData = async () => {
       if (!token) return;
       try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        
-        const catRes = await fetch(`${apiUrl}/categories/`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const catRes = await apiFetch(`/categories/`);
         const catData = await catRes.json();
         const catMap: Record<string, Category> = {};
         if (catData.data) {
@@ -51,9 +48,7 @@ export const Locker: React.FC = () => {
         }
         setCategories(catMap);
 
-        const expRes = await fetch(`${apiUrl}/expenses/`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const expRes = await apiFetch(`/expenses/`);
         const expData = await expRes.json();
         if (expData.data) {
           setRecentExpenses(expData.data.slice(0, 3));
