@@ -7,8 +7,8 @@ export const MainLayout: React.FC = () => {
   const location = useLocation();
 
   const navItems = [
-    { name: 'History', path: '/history', icon: History },
     { name: 'Analytics', path: '/analytics', icon: PieChart },
+    { name: 'History', path: '/history', icon: History },
     { name: 'Locker', path: '/', icon: Camera },
     { name: 'Budget', path: '/budget', icon: Target },
     { name: 'Profile', path: '/profile', icon: User },
