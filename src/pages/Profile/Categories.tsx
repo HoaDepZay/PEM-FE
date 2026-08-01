@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../../components/ui/Button';
 import { Spinner } from '../../components/ui/Spinner';
-import { PageHeader } from '../../components/ui/PageHeader';
 import { 
   ArrowLeft, Plus, Edit2, Trash2, Tag,
   ShoppingCart, Coffee, Utensils, Car, Home,
