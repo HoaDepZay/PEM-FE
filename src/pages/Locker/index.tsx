@@ -6,6 +6,7 @@ import { Inbox } from 'lucide-react';
 import { Spinner } from '../../components/ui/Spinner';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { ExpenseCard } from '../../components/ui/ExpenseCard';
+import { getCategoryFromMap } from '../../utils/uuid';
 
 interface Expense {
   expense_id: string;
@@ -99,19 +100,19 @@ export const Locker: React.FC = () => {
         </div>
         
         {isLoading ? (
-           <Spinner />
+          <Spinner />
         ) : recentExpenses.length === 0 ? (
           <EmptyState 
             icon={Inbox} 
-            message="Chưa có giao dịch nào được ghi nhận." 
+            message="Chưa có giao dịch nào" 
           />
         ) : (
           <div className="space-y-3">
-            {recentExpenses.map((exp) => (
+            {recentExpenses.map((expense) => (
               <ExpenseCard 
-                key={exp.expense_id}
-                expense={exp}
-                category={categories[exp.category_id]}
+                key={expense.expense_id}
+                expense={expense}
+                category={getCategoryFromMap(expense.category_id, categories)}
                 minioUrl={MINIO_URL}
                 formatCurrency={formatCurrency}
                 formatDate={formatDate}

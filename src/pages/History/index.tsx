@@ -5,6 +5,7 @@ import { PageHeader } from '../../components/ui/PageHeader';
 import { Spinner } from '../../components/ui/Spinner';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { ExpensePostCard } from '../../components/ui/ExpensePostCard';
+import { getCategoryFromMap } from '../../utils/uuid';
 
 interface Expense {
   expense_id: string;
@@ -101,7 +102,7 @@ export const History: React.FC = () => {
             <ExpensePostCard 
               key={expense.expense_id}
               expense={expense}
-              category={categories[expense.category_id]}
+              category={getCategoryFromMap(expense.category_id, categories)}
               minioUrl={MINIO_URL}
               formatCurrency={formatCurrency}
               formatDate={formatDate}
