@@ -82,7 +82,7 @@ export const CameraWidget: React.FC = () => {
       const compressedFile = await imageCompression(file, options);
       
       const formData = new FormData();
-      formData.append('image', compressedFile);
+      formData.append('image', compressedFile, "capture.jpg");
       formData.append('amount', amount.replace(/,/g, ''));
       formData.append('category_id', categoryId);
       formData.append('note', note);
