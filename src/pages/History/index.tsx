@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { Calendar as CalendarIcon, Filter, X } from 'lucide-react';
+import { Calendar as CalendarIcon, Filter, X, ChevronDown, Check } from 'lucide-react';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { Spinner } from '../../components/ui/Spinner';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { ExpensePostCard } from '../../components/ui/ExpensePostCard';
 import { getCategoryFromMap } from '../../utils/uuid';
-import { DayPicker } from 'react-day-picker';
+import { DayPicker, type DateRange } from 'react-day-picker';
 import 'react-day-picker/style.css';
 import { vi } from 'date-fns/locale';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -35,10 +35,11 @@ export const History: React.FC = () => {
 
   // Filter state
   const [showFilters, setShowFilters] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [filterCategoryId, setFilterCategoryId] = useState<string>('');
   const [filterMinAmount, setFilterMinAmount] = useState<string>('');
   const [filterMaxAmount, setFilterMaxAmount] = useState<string>('');
-  const [filterDate, setFilterDate] = useState<Date | undefined>(undefined);
+  const [filterDateRange, setFilterDateRange] = useState<DateRange | undefined>(undefined);
 
   const MINIO_URL = import.meta.env.VITE_MINIO_URL || 'http://100.109.65.2:9000';
 
@@ -108,9 +109,18 @@ export const History: React.FC = () => {
       if (expense.amount > max) return false;
     }
     
-    if (filterDate) {
+    if (filterDateRange?.from) {
       const expDate = new Date(expense.expense_date);
-      if (expDate.toDateString() !== filterDate.toDateString()) return false;
+      // set to start of day for accurate comparison
+      const expTime = new Date(expDate.getFullYear(), expDate.getMonth(), expDate.getDate()).getTime();
+      const fromTime = new Date(filterDateRange.from.getFullYear(), filterDateRange.from.getMonth(), filterDateRange.from.getDate()).getTime();
+      
+      if (expTime < fromTime) return false;
+      
+      if (filterDateRange.to) {
+        const toTime = new Date(filterDateRange.to.getFullYear(), filterDateRange.to.getMonth(), filterDateRange.to.getDate()).getTime();
+        if (expTime > toTime) return false;
+      }
     }
     
     return true;
@@ -142,80 +152,120 @@ export const History: React.FC = () => {
             className="overflow-hidden"
           >
             <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-col gap-6 mb-6">
-          {/* Category Filter */}
-          <div>
-            <h3 className="text-sm font-bold text-slate-900 mb-3">Danh mục</h3>
-            <div className="flex flex-wrap gap-2">
-              <button 
-                onClick={() => setFilterCategoryId('')} 
-                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all border ${filterCategoryId === '' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'}`}
-              >
-                Tất cả
-              </button>
-              {Object.values(categories).map(cat => (
-                <button 
-                  key={cat.category_id} 
-                  onClick={() => setFilterCategoryId(cat.category_id)} 
-                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all border flex items-center gap-2 ${filterCategoryId === cat.category_id ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'}`}
+              
+              {/* Category Filter */}
+              <div className="relative">
+                <h3 className="text-sm font-bold text-slate-900 mb-3">Danh mục</h3>
+                <button
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border transition-all ${
+                    isDropdownOpen ? 'bg-white border-slate-900 ring-4 ring-slate-100 shadow-sm' : 'bg-slate-50 border-slate-200 hover:bg-slate-100'
+                  }`}
                 >
-                  <span className="text-lg leading-none" dangerouslySetInnerHTML={{ __html: cat.icon }}></span>
-                  <span>{cat.name}</span>
+                  <div className="flex items-center gap-3">
+                    {filterCategoryId === '' ? (
+                      <span className="font-bold text-slate-900">Tất cả danh mục</span>
+                    ) : (
+                      <>
+                        <span className="text-lg leading-none" dangerouslySetInnerHTML={{ __html: Object.values(categories).find(c => c.category_id === filterCategoryId)?.icon || '' }}></span>
+                        <span className="font-bold text-slate-900">{Object.values(categories).find(c => c.category_id === filterCategoryId)?.name}</span>
+                      </>
+                    )}
+                  </div>
+                  <ChevronDown className={`w-5 h-5 text-slate-900 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
-              ))}
-            </div>
-          </div>
-          
-          {/* Amount Filter */}
-          <div>
-            <h3 className="text-sm font-bold text-slate-900 mb-3">Số tiền</h3>
-            <div className="flex items-center gap-3">
-              <input 
-                type="text" 
-                placeholder="Từ..." 
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-900 focus:outline-none focus:border-slate-900 transition-colors"
-                value={filterMinAmount} 
-                onChange={e => {
-                  const val = e.target.value.replace(/\D/g, '');
-                  setFilterMinAmount(val ? Number(val).toLocaleString('vi-VN') : '');
-                }} 
-              />
-              <span className="text-slate-400 font-bold">-</span>
-              <input 
-                type="text" 
-                placeholder="Đến..." 
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-900 focus:outline-none focus:border-slate-900 transition-colors"
-                value={filterMaxAmount} 
-                onChange={e => {
-                  const val = e.target.value.replace(/\D/g, '');
-                  setFilterMaxAmount(val ? Number(val).toLocaleString('vi-VN') : '');
-                }} 
-              />
-            </div>
-          </div>
 
-          {/* Date Filter */}
-          <div>
-            <div className="flex justify-between items-center mb-3">
-              <h3 className="text-sm font-bold text-slate-900">Ngày giao dịch</h3>
-              {filterDate && (
-                <button onClick={() => setFilterDate(undefined)} className="text-xs text-rose-500 font-medium px-2 py-1 bg-rose-50 rounded-lg hover:bg-rose-100 transition-colors">
-                  Xóa ngày
-                </button>
-              )}
+                <AnimatePresence>
+                  {isDropdownOpen && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-900 rounded-xl shadow-xl overflow-hidden z-20"
+                    >
+                      <div className="max-h-60 overflow-y-auto overscroll-contain">
+                        <button
+                          onClick={() => { setFilterCategoryId(''); setIsDropdownOpen(false); }}
+                          className={`w-full flex items-center justify-between px-4 py-3 text-left transition-colors border-b border-slate-100 ${filterCategoryId === '' ? 'bg-slate-50' : 'hover:bg-slate-50'}`}
+                        >
+                          <span className={`font-bold ${filterCategoryId === '' ? 'text-slate-900' : 'text-slate-700'}`}>Tất cả danh mục</span>
+                          {filterCategoryId === '' && <Check className="w-5 h-5 text-slate-900" />}
+                        </button>
+                        {Object.values(categories).map(cat => (
+                          <button
+                            key={cat.category_id}
+                            onClick={() => { setFilterCategoryId(cat.category_id); setIsDropdownOpen(false); }}
+                            className={`w-full flex items-center justify-between px-4 py-3 text-left transition-colors border-b border-slate-100 last:border-0 ${filterCategoryId === cat.category_id ? 'bg-slate-50' : 'hover:bg-slate-50'}`}
+                          >
+                            <div className="flex items-center gap-3">
+                              <span className="text-lg leading-none" dangerouslySetInnerHTML={{ __html: cat.icon }}></span>
+                              <span className={`font-bold ${filterCategoryId === cat.category_id ? 'text-slate-900' : 'text-slate-700'}`}>{cat.name}</span>
+                            </div>
+                            {filterCategoryId === cat.category_id && <Check className="w-5 h-5 text-slate-900" />}
+                          </button>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                {/* Backdrop to close dropdown */}
+                {isDropdownOpen && (
+                  <div className="fixed inset-0 z-10" onClick={() => setIsDropdownOpen(false)}></div>
+                )}
+              </div>
+              
+              {/* Amount Filter */}
+              <div>
+                <h3 className="text-sm font-bold text-slate-900 mb-3">Số tiền</h3>
+                <div className="flex items-center gap-3">
+                  <input 
+                    type="text" 
+                    placeholder="Từ..." 
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-900 focus:outline-none focus:border-slate-900 transition-colors"
+                    value={filterMinAmount} 
+                    onChange={e => {
+                      const val = e.target.value.replace(/\D/g, '');
+                      setFilterMinAmount(val ? Number(val).toLocaleString('vi-VN') : '');
+                    }} 
+                  />
+                  <span className="text-slate-400 font-bold">-</span>
+                  <input 
+                    type="text" 
+                    placeholder="Đến..." 
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-900 focus:outline-none focus:border-slate-900 transition-colors"
+                    value={filterMaxAmount} 
+                    onChange={e => {
+                      const val = e.target.value.replace(/\D/g, '');
+                      setFilterMaxAmount(val ? Number(val).toLocaleString('vi-VN') : '');
+                    }} 
+                  />
+                </div>
+              </div>
+
+              {/* Date Filter */}
+              <div>
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="text-sm font-bold text-slate-900">Ngày giao dịch</h3>
+                  {filterDateRange && (
+                    <button onClick={() => setFilterDateRange(undefined)} className="text-xs text-rose-500 font-medium px-2 py-1 bg-rose-50 rounded-lg hover:bg-rose-100 transition-colors">
+                      Xóa ngày
+                    </button>
+                  )}
+                </div>
+                <div className="flex justify-center bg-slate-50 p-4 rounded-2xl border border-slate-200 overflow-hidden">
+                  <DayPicker 
+                    mode="range" 
+                    selected={filterDateRange} 
+                    onSelect={setFilterDateRange} 
+                    locale={vi}
+                    className="custom-calendar scale-90 sm:scale-100 origin-top"
+                  />
+                </div>
+              </div>
+
             </div>
-            <div className="flex justify-center bg-slate-50 p-4 rounded-2xl border border-slate-200 overflow-hidden">
-              <DayPicker 
-                mode="single" 
-                selected={filterDate} 
-                onSelect={setFilterDate} 
-                locale={vi}
-                className="custom-calendar scale-90 sm:scale-100 origin-top"
-              />
-            </div>
-          </div>
-        </div>
-        </motion.div>
-      )}
+          </motion.div>
+        )}
       </AnimatePresence>
 
       {isLoading ? (
