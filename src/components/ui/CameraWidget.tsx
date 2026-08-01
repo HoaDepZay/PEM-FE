@@ -1,12 +1,14 @@
 import React, { useRef, useState, useCallback, useEffect, type FormEvent } from 'react';
 import Webcam from 'react-webcam';
-import { Camera, Send, X, ChevronDown, Check } from 'lucide-react';
+import { Camera, Send, X, ChevronDown, Check, Tag } from 'lucide-react';
 import imageCompression from 'browser-image-compression';
 import { useAuth } from '../../context/AuthContext';
+import { ICON_MAP } from '../../utils/icons';
 
 interface Category {
   category_id: string;
   name: string;
+  icon: string;
   color: string;
 }
 
@@ -145,8 +147,8 @@ export const CameraWidget: React.FC = () => {
       ) : (
         <div className="flex flex-col w-full h-full">
           {/* Image Preview Area */}
-          <div className="relative w-full aspect-[4/3] bg-slate-50 border-b border-slate-200">
-            <img src={imageSrc} alt="Captured" className="w-full h-full object-contain" />
+          <div className="relative w-full aspect-[3/4] bg-slate-950 border-b border-slate-900">
+            <img src={imageSrc} alt="Captured" className="w-full h-full object-cover" />
             <button 
               onClick={retake}
               className="absolute top-4 left-4 p-2.5 bg-white/80 rounded-full text-slate-900 backdrop-blur-xl border border-slate-200 z-10 active:scale-90 transition-all shadow-sm"
@@ -165,16 +167,28 @@ export const CameraWidget: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className={`w-full flex items-center justify-between px-6 py-4 rounded-xl border transition-all ${
+                className={`w-full flex items-center justify-between px-6 py-4 rounded-xl border border-slate-900 transition-all ${
                   isDropdownOpen 
-                    ? 'bg-white border-slate-300 ring-4 ring-slate-100 shadow-sm' 
-                    : 'bg-slate-50 border-transparent shadow-inner hover:bg-slate-100'
+                    ? 'bg-white ring-4 ring-slate-100 shadow-sm' 
+                    : 'bg-transparent shadow-sm hover:bg-slate-50'
                 }`}
               >
-                <span className={`font-semibold ${!categoryId ? 'text-slate-900/50' : 'text-slate-900'}`}>
-                  {categories.find(c => c.category_id === categoryId)?.name || 'Chọn danh mục'}
-                </span>
-                <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180 text-slate-900' : ''}`} />
+                <div className="flex items-center gap-3">
+                  {(() => {
+                    const selectedCat = categories.find(c => c.category_id === categoryId);
+                    if (!selectedCat) return <span className="text-slate-900/50 font-bold text-lg">Chọn danh mục</span>;
+                    const Icon = ICON_MAP[selectedCat.icon] || Tag;
+                    return (
+                      <>
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: `${selectedCat.color}15`, color: selectedCat.color }}>
+                          <Icon size={18} strokeWidth={2.5} />
+                        </div>
+                        <span className="font-bold text-slate-900 text-lg">{selectedCat.name}</span>
+                      </>
+                    );
+                  })()}
+                </div>
+                <ChevronDown className={`w-5 h-5 text-slate-900 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} />
               </button>
 
               {isDropdownOpen && (
@@ -186,29 +200,37 @@ export const CameraWidget: React.FC = () => {
                   ></div>
                   
                   {/* Dropdown Menu */}
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-xl shadow-xl shadow-slate-900/10 overflow-hidden z-20 animate-in fade-in slide-in-from-top-2 duration-200">
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-900 rounded-xl shadow-xl overflow-hidden z-20 animate-in fade-in slide-in-from-top-2 duration-200">
                     <div className="max-h-60 overflow-y-auto overscroll-contain">
                       {categories.length === 0 ? (
-                        <div className="px-6 py-4 text-slate-900/60 text-sm">Chưa có danh mục</div>
+                        <div className="px-6 py-4 text-slate-900/60 font-medium">Chưa có danh mục</div>
                       ) : (
-                        categories.map((cat) => (
-                          <button
-                            key={cat.category_id}
-                            type="button"
-                            onClick={() => {
-                              setCategoryId(cat.category_id);
-                              setIsDropdownOpen(false);
-                            }}
-                            className={`w-full flex items-center justify-between px-6 py-3.5 text-left transition-colors ${
-                              categoryId === cat.category_id 
-                                ? 'bg-slate-100 text-slate-900 font-bold' 
-                                : 'text-slate-900/80 hover:bg-slate-50 hover:text-slate-900 font-medium'
-                            }`}
-                          >
-                            <span>{cat.name}</span>
-                            {categoryId === cat.category_id && <Check className="w-5 h-5 text-slate-900" />}
-                          </button>
-                        ))
+                        categories.map((cat) => {
+                          const Icon = ICON_MAP[cat.icon] || Tag;
+                          return (
+                            <button
+                              key={cat.category_id}
+                              type="button"
+                              onClick={() => {
+                                setCategoryId(cat.category_id);
+                                setIsDropdownOpen(false);
+                              }}
+                              className={`w-full flex items-center justify-between px-6 py-3.5 text-left transition-colors border-b border-slate-100 last:border-0 ${
+                                categoryId === cat.category_id 
+                                  ? 'bg-slate-50' 
+                                  : 'hover:bg-slate-50'
+                              }`}
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: `${cat.color}15`, color: cat.color }}>
+                                  <Icon size={18} strokeWidth={2.5} />
+                                </div>
+                                <span className={`font-bold ${categoryId === cat.category_id ? 'text-slate-900' : 'text-slate-700'}`}>{cat.name}</span>
+                              </div>
+                              {categoryId === cat.category_id && <Check className="w-5 h-5 text-slate-900" />}
+                            </button>
+                          );
+                        })
                       )}
                     </div>
                   </div>
@@ -224,7 +246,7 @@ export const CameraWidget: React.FC = () => {
                 placeholder="Số tiền..."
                 value={amount}
                 onChange={handleAmountChange}
-                className="w-full bg-slate-50 text-slate-900 placeholder-brand-700/40 text-2xl font-black px-6 py-4 rounded-2xl border border-transparent focus:outline-none focus:bg-white focus:border-slate-300 focus:ring-4 focus:ring-slate-100 transition-all shadow-inner"
+                className="w-full bg-transparent text-slate-900 placeholder-slate-400 text-xl font-bold px-6 py-4 rounded-xl border border-slate-900 focus:outline-none focus:ring-4 focus:ring-slate-100 transition-all shadow-sm"
                 required
               />
               
@@ -233,7 +255,7 @@ export const CameraWidget: React.FC = () => {
                 placeholder="Ghi chú (Tùy chọn)..."
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
-                className="w-full bg-slate-50 text-slate-900 placeholder-brand-700/40 text-base font-medium px-6 py-4 rounded-xl border border-transparent focus:outline-none focus:bg-white focus:border-slate-300 focus:ring-4 focus:ring-slate-100 transition-all shadow-inner"
+                className="w-full bg-transparent text-slate-900 placeholder-slate-400 text-base font-bold px-6 py-4 rounded-xl border border-slate-900 focus:outline-none focus:ring-4 focus:ring-slate-100 transition-all shadow-sm"
               />
             </div>
 
