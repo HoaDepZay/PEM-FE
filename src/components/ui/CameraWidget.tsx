@@ -147,7 +147,7 @@ export const CameraWidget: React.FC = () => {
       ) : (
         <div className="flex flex-col w-full h-full">
           {/* Image Preview Area */}
-          <div className="relative w-full aspect-[3/4] bg-slate-950 border-b border-slate-900">
+          <div className="relative w-full aspect-[3/4] bg-slate-950 rounded-b-3xl overflow-hidden shadow-sm z-10">
             <img src={imageSrc} alt="Captured" className="w-full h-full object-cover" />
             <button 
               onClick={retake}
