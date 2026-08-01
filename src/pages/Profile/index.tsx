@@ -11,6 +11,24 @@ export const Profile: React.FC = () => {
   const [isUploading, setIsUploading] = useState(false);
   const MINIO_URL = import.meta.env.VITE_MINIO_URL || 'http://100.109.65.2:9000';
 
+  React.useEffect(() => {
+    const fetchProfile = async () => {
+      if (!token) return;
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/profile/me`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data.success && data.data) {
+          updateUser(data.data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch profile', err);
+      }
+    };
+    fetchProfile();
+  }, [token]);
+
   // Password modal state
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [oldPassword, setOldPassword] = useState('');
