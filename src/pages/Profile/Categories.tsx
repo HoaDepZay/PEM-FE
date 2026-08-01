@@ -6,7 +6,7 @@ import {
   ArrowLeft, Plus, Edit2, Trash2, Tag,
   ShoppingCart, Coffee, Utensils, Car, Home,
   Heart, Bus, Plane, Book, GraduationCap,
-  Music, Film, Smartphone, Gift, Briefcase
+  Music, Film, Smartphone, Gift, Briefcase, Check
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
@@ -162,19 +162,20 @@ export const Categories: React.FC = () => {
           <h2 className="text-xl font-bold text-slate-900">{editingId ? 'Sửa danh mục' : 'Thêm danh mục mới'}</h2>
           
           <div>
-            <label className="block text-slate-600 font-medium mb-2">Tên danh mục</label>
+            <label className="block text-slate-700 font-bold mb-3 text-sm uppercase tracking-wider">Tên danh mục</label>
             <input 
               type="text" 
               value={formData.name}
               onChange={(e) => setFormData({...formData, name: e.target.value})}
               required
               placeholder="VD: Ăn sáng, Cà phê..."
+              className="w-full bg-slate-50 text-slate-900 placeholder-slate-400 text-lg font-bold px-4 py-3.5 rounded-2xl border border-slate-200 focus:outline-none focus:border-slate-900 focus:ring-4 focus:ring-slate-100 transition-all shadow-sm"
             />
           </div>
 
           <div>
-            <label className="block text-slate-600 font-medium mb-3">Biểu tượng</label>
-            <div className="flex gap-2 flex-wrap">
+            <label className="block text-slate-700 font-bold mb-3 text-sm uppercase tracking-wider">Biểu tượng</label>
+            <div className="flex gap-3 flex-wrap">
               {AVAILABLE_ICONS.map(iconName => {
                 const IconComp = ICON_MAP[iconName];
                 return (
@@ -182,9 +183,13 @@ export const Categories: React.FC = () => {
                     key={iconName}
                     type="button"
                     onClick={() => setFormData({...formData, icon: iconName})}
-                    className={`p-3 rounded-xl border-2 transition-all shadow-sm flex items-center justify-center ${formData.icon === iconName ? 'border-slate-800 bg-white text-slate-900' : 'border-slate-200 bg-white text-slate-900/70 hover:border-slate-300'}`}
+                    className={`w-14 h-14 rounded-2xl transition-all shadow-sm flex items-center justify-center ${
+                      formData.icon === iconName 
+                        ? 'bg-slate-900 text-white ring-4 ring-slate-200 scale-105' 
+                        : 'bg-white text-slate-500 border border-slate-200 hover:border-slate-400 hover:bg-slate-50'
+                    }`}
                   >
-                    <IconComp className="w-6 h-6" />
+                    <IconComp className="w-6 h-6" strokeWidth={2.5} />
                   </button>
                 );
               })}
@@ -192,16 +197,22 @@ export const Categories: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-slate-600 font-medium mb-3">Màu sắc</label>
-            <div className="flex gap-3 flex-wrap">
+            <label className="block text-slate-700 font-bold mb-3 text-sm uppercase tracking-wider">Màu sắc</label>
+            <div className="flex gap-4 flex-wrap">
               {AVAILABLE_COLORS.map(color => (
                 <button 
                   key={color} 
                   type="button"
                   onClick={() => setFormData({...formData, color})}
-                  className={`w-10 h-10 rounded-full border-2 transition-all shadow-sm ${formData.color === color ? 'border-slate-900 scale-110' : 'border-transparent scale-100 hover:scale-110'}`}
+                  className={`w-12 h-12 flex items-center justify-center rounded-full transition-all shadow-sm ${
+                    formData.color === color 
+                      ? 'ring-4 ring-offset-2 ring-slate-900 scale-110' 
+                      : 'hover:scale-110 border border-transparent'
+                  }`}
                   style={{ backgroundColor: color }}
-                />
+                >
+                  {formData.color === color && <Check className="w-6 h-6 text-white drop-shadow-md" strokeWidth={3} />}
+                </button>
               ))}
             </div>
           </div>
