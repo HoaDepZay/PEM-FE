@@ -79,16 +79,7 @@ export const Locker: React.FC = () => {
 
   return (
     <div className="pt-8 px-5 pb-24 space-y-8">
-      {/* Header */}
-      <div className="flex justify-between items-center bg-white p-5 rounded-3xl shadow-sm border border-slate-200">
-        <div>
-          <p className="text-slate-900/60 text-sm font-medium">Xin chào,</p>
-          <h1 className="text-2xl font-black bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">{user?.username}</h1>
-        </div>
-        <div className="w-14 h-14 bg-gradient-to-tr from-brand-500 to-brand-400 rounded-full flex items-center justify-center text-xl font-bold text-white shadow-lg shadow-slate-200/50">
-          {user?.username ? user.username.charAt(0).toUpperCase() : 'U'}
-        </div>
-      </div>
+
 
       {/* Embedded Camera */}
       <div>
