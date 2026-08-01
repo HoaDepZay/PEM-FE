@@ -6,6 +6,8 @@ import { Spinner } from '../../components/ui/Spinner';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { ExpensePostCard } from '../../components/ui/ExpensePostCard';
 import { getCategoryFromMap } from '../../utils/uuid';
+import { ICON_MAP } from '../../utils/icons';
+import { Tag } from 'lucide-react';
 import { DayPicker, type DateRange } from 'react-day-picker';
 import 'react-day-picker/style.css';
 import { vi } from 'date-fns/locale';
@@ -166,10 +168,19 @@ export const History: React.FC = () => {
                     {filterCategoryId === '' ? (
                       <span className="font-bold text-slate-900">Tất cả danh mục</span>
                     ) : (
-                      <>
-                        <span className="text-lg leading-none" dangerouslySetInnerHTML={{ __html: Object.values(categories).find(c => c.category_id === filterCategoryId)?.icon || '' }}></span>
-                        <span className="font-bold text-slate-900">{Object.values(categories).find(c => c.category_id === filterCategoryId)?.name}</span>
-                      </>
+                      (() => {
+                        const cat = Object.values(categories).find(c => c.category_id === filterCategoryId);
+                        if (!cat) return null;
+                        const Icon = ICON_MAP[cat.icon] || Tag;
+                        return (
+                          <>
+                            <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: `${cat.color}15`, color: cat.color }}>
+                              <Icon size={18} strokeWidth={2.5} />
+                            </div>
+                            <span className="font-bold text-slate-900">{cat.name}</span>
+                          </>
+                        );
+                      })()
                     )}
                   </div>
                   <ChevronDown className={`w-5 h-5 text-slate-900 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} />
@@ -191,19 +202,24 @@ export const History: React.FC = () => {
                           <span className={`font-bold ${filterCategoryId === '' ? 'text-slate-900' : 'text-slate-700'}`}>Tất cả danh mục</span>
                           {filterCategoryId === '' && <Check className="w-5 h-5 text-slate-900" />}
                         </button>
-                        {Object.values(categories).map(cat => (
-                          <button
-                            key={cat.category_id}
-                            onClick={() => { setFilterCategoryId(cat.category_id); setIsDropdownOpen(false); }}
-                            className={`w-full flex items-center justify-between px-4 py-3 text-left transition-colors border-b border-slate-100 last:border-0 ${filterCategoryId === cat.category_id ? 'bg-slate-50' : 'hover:bg-slate-50'}`}
-                          >
-                            <div className="flex items-center gap-3">
-                              <span className="text-lg leading-none" dangerouslySetInnerHTML={{ __html: cat.icon }}></span>
-                              <span className={`font-bold ${filterCategoryId === cat.category_id ? 'text-slate-900' : 'text-slate-700'}`}>{cat.name}</span>
-                            </div>
-                            {filterCategoryId === cat.category_id && <Check className="w-5 h-5 text-slate-900" />}
-                          </button>
-                        ))}
+                        {Object.values(categories).map(cat => {
+                          const Icon = ICON_MAP[cat.icon] || Tag;
+                          return (
+                            <button
+                              key={cat.category_id}
+                              onClick={() => { setFilterCategoryId(cat.category_id); setIsDropdownOpen(false); }}
+                              className={`w-full flex items-center justify-between px-4 py-3 text-left transition-colors border-b border-slate-100 last:border-0 ${filterCategoryId === cat.category_id ? 'bg-slate-50' : 'hover:bg-slate-50'}`}
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: `${cat.color}15`, color: cat.color }}>
+                                  <Icon size={18} strokeWidth={2.5} />
+                                </div>
+                                <span className={`font-bold ${filterCategoryId === cat.category_id ? 'text-slate-900' : 'text-slate-700'}`}>{cat.name}</span>
+                              </div>
+                              {filterCategoryId === cat.category_id && <Check className="w-5 h-5 text-slate-900" />}
+                            </button>
+                          );
+                        })}
                       </div>
                     </motion.div>
                   )}
