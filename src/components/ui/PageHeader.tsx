@@ -8,7 +8,7 @@ interface PageHeaderProps {
 
 export const PageHeader: React.FC<PageHeaderProps> = ({ title, subtitle, rightContent }) => {
   return (
-    <div className="mb-6 flex justify-between items-end">
+    <div className="mb-6 flex flex-wrap justify-between items-end gap-4">
       <div>
         <h1 className="text-2xl font-black text-slate-900">{title}</h1>
         {subtitle && <p className="text-slate-900/60 text-sm font-medium mt-1">{subtitle}</p>}
