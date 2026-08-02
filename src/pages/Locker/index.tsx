@@ -16,6 +16,7 @@ interface Expense {
   image_url: string;
   expense_date: string;
   category_id: string;
+  created_at?: string;
 }
 
 interface Category {
@@ -67,7 +68,14 @@ export const Locker: React.FC = () => {
             return expDate.getDate() === today.getDate() &&
                    expDate.getMonth() === today.getMonth() &&
                    expDate.getFullYear() === today.getFullYear();
-          }).sort((a: Expense, b: Expense) => new Date(b.expense_date).getTime() - new Date(a.expense_date).getTime());
+          }).sort((a: Expense, b: Expense) => {
+            const timeA = new Date(a.expense_date).getTime();
+            const timeB = new Date(b.expense_date).getTime();
+            if (timeA === timeB && a.created_at && b.created_at) {
+              return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+            }
+            return timeB - timeA;
+          });
           setRecentExpenses(todaysExpenses.slice(0, 5));
         }
       } catch (error) {

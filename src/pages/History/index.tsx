@@ -21,6 +21,7 @@ interface Expense {
   image_url: string;
   expense_date: string;
   category_id: string;
+  created_at?: string;
 }
 
 interface Category {
@@ -133,7 +134,14 @@ export const History: React.FC = () => {
     }
     
     return true;
-  }).sort((a, b) => new Date(b.expense_date).getTime() - new Date(a.expense_date).getTime());
+  }).sort((a, b) => {
+    const timeA = new Date(a.expense_date).getTime();
+    const timeB = new Date(b.expense_date).getTime();
+    if (timeA === timeB && a.created_at && b.created_at) {
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+    }
+    return timeB - timeA;
+  });
 
   return (
     <div className="pt-8 px-4 pb-24 bg-transparent min-h-screen">
