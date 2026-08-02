@@ -69,11 +69,12 @@ export const Locker: React.FC = () => {
                    expDate.getMonth() === today.getMonth() &&
                    expDate.getFullYear() === today.getFullYear();
           }).sort((a: Expense, b: Expense) => {
+            if (a.created_at && b.created_at) {
+              const timeDiff = new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+              if (timeDiff !== 0) return timeDiff;
+            }
             const timeA = new Date(a.expense_date).getTime();
             const timeB = new Date(b.expense_date).getTime();
-            if (timeA === timeB && a.created_at && b.created_at) {
-              return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-            }
             return timeB - timeA;
           });
           setRecentExpenses(todaysExpenses.slice(0, 5));
