@@ -42,8 +42,11 @@ export const History: React.FC = () => {
   const [filterCategoryId, setFilterCategoryId] = useState<string>('');
   const [filterMinAmount, setFilterMinAmount] = useState<string>('');
   const [filterMaxAmount, setFilterMaxAmount] = useState<string>('');
-  const [filterDateRange, setFilterDateRange] = useState<DateRange | undefined>(undefined);
-
+  const [activeQuickFilter, setActiveQuickFilter] = useState<'today' | 'week' | 'custom'>('today');
+  const [filterDateRange, setFilterDateRange] = useState<DateRange | undefined>(() => {
+    const today = new Date();
+    return { from: today, to: today };
+  });
   const MINIO_URL = import.meta.env.VITE_MINIO_URL || 'http://100.109.65.2:9000';
 
   useEffect(() => {
@@ -129,12 +132,48 @@ export const History: React.FC = () => {
         title="Lịch sử giao dịch" 
         subtitle="Xem lại các khoản chi tiêu gần đây của bạn" 
         rightContent={
-          <button 
-            onClick={() => setShowFilters(!showFilters)}
-            className={`p-2 rounded-full transition-colors ${showFilters ? 'bg-slate-900 text-white' : 'bg-white text-slate-900 border border-slate-200 shadow-sm'}`}
-          >
-            {showFilters ? <X className="w-5 h-5" /> : <Filter className="w-5 h-5" />}
-          </button>
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={() => {
+                const today = new Date();
+                setFilterDateRange({ from: today, to: today });
+                setActiveQuickFilter('today');
+              }}
+              className={`px-4 py-2 rounded-full text-sm font-bold transition-colors ${
+                activeQuickFilter === 'today'
+                  ? 'bg-slate-900 text-white' 
+                  : 'bg-white text-slate-900 border border-slate-200'
+              }`}
+            >
+              Hôm nay
+            </button>
+            <button 
+              onClick={() => {
+                const today = new Date();
+                const day = today.getDay();
+                const diff = today.getDate() - day + (day === 0 ? -6 : 1); 
+                const monday = new Date(today);
+                monday.setDate(diff);
+                const sunday = new Date(monday);
+                sunday.setDate(monday.getDate() + 6);
+                setFilterDateRange({ from: monday, to: sunday });
+                setActiveQuickFilter('week');
+              }}
+              className={`px-4 py-2 rounded-full text-sm font-bold transition-colors ${
+                activeQuickFilter === 'week'
+                  ? 'bg-slate-900 text-white' 
+                  : 'bg-white text-slate-900 border border-slate-200'
+              }`}
+            >
+              Tuần này
+            </button>
+            <button 
+              onClick={() => setShowFilters(!showFilters)}
+              className={`p-2 rounded-full transition-colors ${showFilters ? 'bg-slate-900 text-white' : 'bg-white text-slate-900 border border-slate-200 shadow-sm'}`}
+            >
+              {showFilters ? <X className="w-5 h-5" /> : <Filter className="w-5 h-5" />}
+            </button>
+          </div>
         }
       />
 
@@ -258,7 +297,7 @@ export const History: React.FC = () => {
                 <div className="flex justify-between items-center mb-3">
                   <h3 className="text-sm font-bold text-slate-900">Ngày giao dịch</h3>
                   {filterDateRange && (
-                    <button onClick={() => setFilterDateRange(undefined)} className="text-xs text-rose-500 font-medium px-2 py-1 bg-rose-50 rounded-lg hover:bg-rose-100 transition-colors">
+                    <button onClick={() => { setFilterDateRange(undefined); setActiveQuickFilter('custom'); }} className="text-xs text-rose-500 font-medium px-2 py-1 bg-rose-50 rounded-lg hover:bg-rose-100 transition-colors">
                       Xóa ngày
                     </button>
                   )}
@@ -267,7 +306,10 @@ export const History: React.FC = () => {
                   <DayPicker 
                     mode="range" 
                     selected={filterDateRange} 
-                    onSelect={setFilterDateRange} 
+                    onSelect={(range) => {
+                      setFilterDateRange(range);
+                      setActiveQuickFilter('custom');
+                    }} 
                     locale={vi}
                     className="custom-calendar scale-90 sm:scale-100 origin-top"
                   />
