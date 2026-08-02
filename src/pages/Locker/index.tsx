@@ -67,7 +67,7 @@ export const Locker: React.FC = () => {
             return expDate.getDate() === today.getDate() &&
                    expDate.getMonth() === today.getMonth() &&
                    expDate.getFullYear() === today.getFullYear();
-          });
+          }).sort((a: Expense, b: Expense) => new Date(b.expense_date).getTime() - new Date(a.expense_date).getTime());
           setRecentExpenses(todaysExpenses.slice(0, 5));
         }
       } catch (error) {

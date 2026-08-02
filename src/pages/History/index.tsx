@@ -133,7 +133,7 @@ export const History: React.FC = () => {
     }
     
     return true;
-  });
+  }).sort((a, b) => new Date(b.expense_date).getTime() - new Date(a.expense_date).getTime());
 
   return (
     <div className="pt-8 px-4 pb-24 bg-transparent min-h-screen">
