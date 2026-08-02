@@ -56,8 +56,17 @@ export const History: React.FC = () => {
         const catData = await catRes.json();
         const catMap: Record<string, Category> = {};
         if (catData.data) {
-          catData.data.forEach((c: Category) => {
-            catMap[c.category_id] = c;
+          catData.data.forEach((group: any) => {
+            if (group.categories) {
+              group.categories.forEach((sub: any) => {
+                catMap[sub.category_id] = {
+                  category_id: sub.category_id,
+                  name: `${group.name} - ${sub.name}`,
+                  icon: group.icon,
+                  color: group.color
+                };
+              });
+            }
           });
         }
         setCategories(catMap);

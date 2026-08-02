@@ -1,17 +1,17 @@
 import React from 'react';
 import { Outlet, NavLink, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { History, PieChart, Camera, Target, User } from 'lucide-react';
+import { History, PieChart, Camera, User, Tag } from 'lucide-react';
 
 export const MainLayout: React.FC = () => {
   const location = useLocation();
 
   const navItems = [
-    { name: 'Analytics', path: '/analytics', icon: PieChart },
-    { name: 'History', path: '/history', icon: History },
-    { name: 'Locker', path: '/', icon: Camera },
-    { name: 'Budget', path: '/budget', icon: Target },
-    { name: 'Profile', path: '/profile', icon: User },
+    { name: 'Phân tích', path: '/analytics', icon: PieChart },
+    { name: 'Lịch sử', path: '/history', icon: History },
+    { name: 'Thu chi', path: '/', icon: Camera },
+    { name: 'Danh mục', path: '/categories', icon: Tag },
+    { name: 'Hồ sơ', path: '/profile', icon: User },
   ];
 
   return (
@@ -21,10 +21,10 @@ export const MainLayout: React.FC = () => {
         <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}
-            initial={{ opacity: 0, y: 10, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -10, scale: 0.98 }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15, ease: 'easeInOut' }}
             className="w-full h-full overflow-y-auto pb-24 absolute inset-0"
           >
             <Outlet />

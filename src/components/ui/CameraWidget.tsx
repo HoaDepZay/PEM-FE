@@ -1,6 +1,6 @@
 import React, { useRef, useState, useCallback, useEffect, type FormEvent } from 'react';
 import Webcam from 'react-webcam';
-import { Camera, Send, X, ChevronDown, Check, Tag } from 'lucide-react';
+import { Camera, Send, X, ChevronDown, Check, Tag, ImagePlus } from 'lucide-react';
 import imageCompression from 'browser-image-compression';
 import { useAuth } from '../../context/AuthContext';
 import { apiFetch } from '../../utils/api';
@@ -15,6 +15,7 @@ interface Category {
 
 export const CameraWidget: React.FC = () => {
   const webcamRef = useRef<Webcam>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   
   const [amount, setAmount] = useState('');
@@ -33,9 +34,24 @@ export const CameraWidget: React.FC = () => {
         const res = await apiFetch(`/categories/`);
         if (res.ok) {
           const data = await res.json();
-          setCategories(data.data || []);
-          if (data.data && data.data.length > 0) {
-            setCategoryId(data.data[0].category_id);
+          const flatCategories: Category[] = [];
+          if (data.data) {
+            data.data.forEach((group: any) => {
+              if (group.categories) {
+                group.categories.forEach((sub: any) => {
+                  flatCategories.push({
+                    category_id: sub.category_id,
+                    name: `${group.name} - ${sub.name}`,
+                    icon: group.icon,
+                    color: group.color
+                  });
+                });
+              }
+            });
+          }
+          setCategories(flatCategories);
+          if (flatCategories.length > 0) {
+            setCategoryId(flatCategories[0].category_id);
           }
         }
       } catch (err) {
@@ -57,6 +73,17 @@ export const CameraWidget: React.FC = () => {
       setImageSrc(imageSrc);
     }
   }, [webcamRef]);
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageSrc(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const retake = () => {
     setImageSrc(null);
@@ -126,8 +153,24 @@ export const CameraWidget: React.FC = () => {
             videoConstraints={videoConstraints}
             className="w-full h-full object-cover"
           />
-          {/* Nút chụp hình */}
-          <div className="absolute bottom-6 w-full flex justify-center">
+          {/* Nút chụp hình & Upload */}
+          <div className="absolute bottom-6 w-full flex justify-center items-center gap-6">
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center border-[2px] border-white/80 backdrop-blur-md active:scale-90 transition-all shadow-[0_0_15px_rgba(255,255,255,0.2)]"
+            >
+              <div className="w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-inner">
+                <ImagePlus className="text-slate-900 w-5 h-5" />
+              </div>
+            </button>
+            <input 
+              type="file" 
+              accept="image/*" 
+              ref={fileInputRef} 
+              onChange={handleFileUpload} 
+              className="hidden" 
+            />
+
             <button
               onClick={capture}
               className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center border-[3px] border-white/80 backdrop-blur-md active:scale-90 transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)]"
@@ -136,6 +179,8 @@ export const CameraWidget: React.FC = () => {
                 <Camera className="text-slate-900 w-6 h-6" />
               </div>
             </button>
+            
+            <div className="w-12 h-12"></div> {/* Placeholder to keep the camera button perfectly centered */}
           </div>
         </>
       ) : (
@@ -233,16 +278,32 @@ export const CameraWidget: React.FC = () => {
             </div>
 
             <div className="flex flex-col gap-3">
-              <input
-                type="text"
-                inputMode="numeric"
-                autoFocus
-                placeholder="Số tiền..."
-                value={amount}
-                onChange={handleAmountChange}
-                className="w-full bg-white text-slate-900 placeholder-slate-400 text-xl font-bold px-4 py-3.5 rounded-2xl border border-slate-200 focus:outline-none focus:border-slate-900 focus:ring-4 focus:ring-slate-100 transition-all shadow-sm"
-                required
-              />
+              <div className="relative">
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  autoFocus
+                  placeholder="Số tiền..."
+                  value={amount}
+                  onChange={handleAmountChange}
+                  className="w-full bg-white text-slate-900 placeholder-slate-400 text-xl font-bold px-4 py-3.5 pr-20 rounded-2xl border border-slate-200 focus:outline-none focus:border-slate-900 focus:ring-4 focus:ring-slate-100 transition-all shadow-sm"
+                  required
+                />
+                {amount && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const currentVal = amount.replace(/\D/g, '');
+                      if (currentVal) {
+                        setAmount(Number(currentVal + '000').toLocaleString('en-US'));
+                      }
+                    }}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-3 py-2 rounded-xl text-sm transition-colors active:scale-95"
+                  >
+                    .000
+                  </button>
+                )}
+              </div>
               
               <input
                 type="text"

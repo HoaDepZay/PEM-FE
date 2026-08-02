@@ -15,6 +15,7 @@ import { Analytics } from './pages/Analytics'
 import { Budget } from './pages/Budget'
 import { Profile } from './pages/Profile'
 import { Categories } from './pages/Profile/Categories'
+import { CategoryForm } from './pages/Profile/CategoryForm'
 
 function App() {
   return (
@@ -37,6 +38,8 @@ function App() {
               <Route path="/budget" element={<Budget />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/categories" element={<Categories />} />
+              <Route path="/categories/create" element={<CategoryForm />} />
+              <Route path="/categories/edit" element={<CategoryForm />} />
             </Route>
           </Route>
 

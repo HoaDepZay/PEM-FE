@@ -1,9 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { apiFetch } from '../../utils/api';
-import { LogOut, Settings, Tags, Camera, KeyRound, Loader2, Edit2, Eye, EyeOff } from 'lucide-react';
-import { Link } from 'react-router-dom';
-
+import { LogOut, Settings, Camera, KeyRound, Loader2, Edit2, Eye, EyeOff } from 'lucide-react';
 export const Profile: React.FC = () => {
   const { user, token, logout, updateUser } = useAuth();
   
@@ -210,13 +208,6 @@ export const Profile: React.FC = () => {
       </div>
 
       <div className="space-y-3">
-        <Link to="/categories" className="w-full bg-white border border-slate-200 flex items-center gap-4 p-4 rounded-2xl text-slate-900 hover:bg-slate-50 transition-all active:scale-95 shadow-sm">
-          <div className="p-2 bg-white rounded-xl">
-            <Tags className="w-6 h-6 text-slate-900" />
-          </div>
-          <span className="font-medium text-lg">Quản lý danh mục</span>
-        </Link>
-
         <button 
           onClick={() => setIsPasswordModalOpen(true)}
           className="w-full bg-white border border-slate-200 flex items-center gap-4 p-4 rounded-2xl text-slate-900 hover:bg-slate-50 transition-all active:scale-95 shadow-sm"
