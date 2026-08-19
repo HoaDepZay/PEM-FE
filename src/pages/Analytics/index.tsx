@@ -3,13 +3,13 @@ import { useAuth } from '../../context/AuthContext';
 import { apiFetch } from '../../utils/api';
 import { Spinner } from '../../components/ui/Spinner';
 import { ChevronDown } from 'lucide-react';
-import { startOfMonth, endOfMonth, subMonths, startOfWeek, endOfWeek, isWithinInterval, parseISO } from 'date-fns';
+import { startOfMonth, endOfMonth, subMonths, startOfWeek, endOfWeek, startOfDay, endOfDay, getDaysInMonth, isWithinInterval, parseISO } from 'date-fns';
 
 import { OverviewCard } from '../../components/ui/OverviewCard';
 import { BudgetAlerts } from '../../components/ui/BudgetAlerts';
 import { SpendingChart } from '../../components/ui/SpendingChart';
 
-type TimeRange = 'this_month' | 'last_month' | 'this_week';
+type TimeRange = 'today' | 'this_week' | 'this_month' | 'last_month';
 
 interface Expense {
   expense_id: string;
@@ -73,7 +73,10 @@ export const Analytics: React.FC = () => {
     const now = new Date();
     let start: Date, end: Date;
 
-    if (timeRange === 'this_month') {
+    if (timeRange === 'today') {
+      start = startOfDay(now);
+      end = endOfDay(now);
+    } else if (timeRange === 'this_month') {
       start = startOfMonth(now);
       end = endOfMonth(now);
     } else if (timeRange === 'last_month') {
@@ -119,10 +122,39 @@ export const Analytics: React.FC = () => {
     return Object.values(dataMap).sort((a, b) => b.value - a.value); // Sort descending
   }, [filteredExpenses, groups]);
 
-  // Tính toán Tổng Ngân sách
+  // Tính toán Tổng Ngân sách tương ứng với timeRange
   const totalBudget = useMemo(() => {
-    return groups.reduce((sum, g) => sum + (g.total_budget || 0), 0);
-  }, [groups]);
+    let total = 0;
+    const now = new Date();
+    const daysInCurrentMonth = getDaysInMonth(now);
+    
+    let rangeDays = daysInCurrentMonth;
+    if (timeRange === 'today') {
+      rangeDays = 1;
+    } else if (timeRange === 'this_week') {
+      rangeDays = 7;
+    } else if (timeRange === 'last_month') {
+      rangeDays = getDaysInMonth(subMonths(now, 1));
+    }
+
+    groups.forEach(g => {
+      g.categories?.forEach(c => {
+        const amount = c.budget_amount || 0;
+        if (amount > 0) {
+           let dailyAmount = 0;
+           switch (c.budget_type) {
+             case 'DAILY': dailyAmount = amount; break;
+             case 'WEEKLY': dailyAmount = amount / 7; break;
+             case 'MONTHLY': dailyAmount = amount / daysInCurrentMonth; break;
+             case 'YEARLY': dailyAmount = amount / 365; break;
+             default: dailyAmount = amount / daysInCurrentMonth;
+           }
+           total += dailyAmount * rangeDays;
+        }
+      });
+    });
+    return Math.round(total);
+  }, [groups, timeRange]);
 
   const overBudgetCats = useMemo(() => {
     const cats: any[] = [];
@@ -142,6 +174,7 @@ export const Analytics: React.FC = () => {
   };
 
   const getRangeLabel = () => {
+    if (timeRange === 'today') return 'Hôm nay';
     if (timeRange === 'this_month') return 'Tháng này';
     if (timeRange === 'last_month') return 'Tháng trước';
     return 'Tuần này';
@@ -171,6 +204,7 @@ export const Analytics: React.FC = () => {
             <>
               <div className="fixed inset-0" onClick={() => setIsDropdownOpen(false)}></div>
               <div className="absolute right-0 top-full mt-2 w-40 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden text-sm font-medium">
+                <button onClick={() => {setTimeRange('today'); setIsDropdownOpen(false)}} className={`w-full text-left px-4 py-3 hover:bg-slate-50 ${timeRange === 'today' ? 'text-blue-600 bg-blue-50' : 'text-slate-700'}`}>Hôm nay</button>
                 <button onClick={() => {setTimeRange('this_week'); setIsDropdownOpen(false)}} className={`w-full text-left px-4 py-3 hover:bg-slate-50 ${timeRange === 'this_week' ? 'text-blue-600 bg-blue-50' : 'text-slate-700'}`}>Tuần này</button>
                 <button onClick={() => {setTimeRange('this_month'); setIsDropdownOpen(false)}} className={`w-full text-left px-4 py-3 hover:bg-slate-50 ${timeRange === 'this_month' ? 'text-blue-600 bg-blue-50' : 'text-slate-700'}`}>Tháng này</button>
                 <button onClick={() => {setTimeRange('last_month'); setIsDropdownOpen(false)}} className={`w-full text-left px-4 py-3 hover:bg-slate-50 ${timeRange === 'last_month' ? 'text-blue-600 bg-blue-50' : 'text-slate-700'}`}>Tháng trước</button>
